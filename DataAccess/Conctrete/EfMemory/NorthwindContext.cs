@@ -15,7 +15,10 @@ namespace DataAccess.Conctrete.EfMemory
             optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=CarData;Trusted_Connection=true;");
         }
         public DbSet<Car> Cars { get; set; }
-        public DbSet<Color> Color { get; set; }
+        public DbSet<Colors> Colors { get; set; }
         public DbSet<Brand> Brands { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Rental> Rental { get; set; }
+        public DbSet<Customer> Customers { get; set; }
     }
 }

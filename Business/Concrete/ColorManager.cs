@@ -1,5 +1,8 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Conctrete.EfMemory;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -11,34 +14,57 @@ namespace Business.Concrete
 {
     public class ColorManager : IColorService
     {
-        IColorDal _colorDal;
-        public ColorManager(IColorDal colorDal)
+        IColorDal _colordal;
+        public ColorManager(IColorDal colordal)
         {
-            _colorDal = colorDal;
-        }
-        public void Add(Color color)
-        {
-            _colorDal.Add(color);
+            _colordal = colordal;
         }
 
-        public void Delete(Color color)
+        public IResult Add(Colors colors)
         {
-            _colorDal.Delete(color);
+            if (colors.ColorName.Length<3)
+            {
+                return new ErrorResult(Messages.InvalidNameError);
+            }
+            _colordal.Add(colors);
+            return new SuccessResult(Messages.Succeed);
         }
 
-        public List<Color> GetAllColors()
+        public IResult Delete(Colors colors)
         {
-            return _colorDal.GetAll();
+            if (DateTime.Now.Hour == 18)
+            {
+                return new ErrorResult(Messages.MaintenanceTime);
+            }
+            return new SuccessResult(Messages.Succeed);
         }
 
-        public Color GetColorById(int id)
+        public IDataResult<List<Colors>> GetAllColors()
         {
-            return _colorDal.Get(c=>c.ColorId== id);
+            if (DateTime.Now.Hour == 18)
+            {
+                return new ErrorDataResult<List<Colors>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<Colors>>(_colordal.GetAll(),Messages.Succeed);
         }
 
-        public void Update(Color color)
+        public IDataResult<Colors> GetColorById(int id)
         {
-            _colorDal.Update(color);
+            if (DateTime.Now.Hour == 18)
+            {
+                return new ErrorDataResult<Colors>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<Colors>(_colordal.Get(c=>c.Id==id), Messages.Succeed);
+        }
+
+        public IResult Update(Colors colors)
+        {
+            if (colors.ColorName.Length <3 && DateTime.Now.Hour == 18)
+            {
+                return new ErrorResult(Messages.MaintenanceTime + Messages.InvalidNameError);
+            }
+            _colordal.Update(colors);
+            return new SuccessResult( Messages.Succeed);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -9,36 +11,57 @@ using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
-    public class BrandManager :IBrandService
+    public class BrandManager : IBrandService
     {
         IBrandDal _brandDal;
-        public BrandManager(IBrandDal brandDal) {
+        public BrandManager(IBrandDal brandDal)
+        {
             _brandDal = brandDal;
         }
 
-        public void Add(Brand brand)
+        public IResult Add(Brand brand)
         {
+            if (brand.BrandName.Length<3)
+            {
+                return new ErrorResult(Messages.InvalidNameError);
+            }
             _brandDal.Add(brand);
+            return new SuccessResult(Messages.Succeed);
         }
 
-        public void Delete(Brand brand)
+        public IResult Delete(Brand brand)
         {
+            if (DateTime.Now.Hour ==18)
+            {
+                return new ErrorResult(Messages.InvalidNameError);
+            }
             _brandDal.Delete(brand);
+            return new SuccessResult(Messages.Succeed);
         }
 
-        public List<Brand> GetAllBrands()
+        public IDataResult<List<Brand>> GetAllBrands()
         {
-            return _brandDal.GetAll();
+            if (DateTime.Now.Hour == 18)
+            {
+                return new ErrorDataResult<List<Brand>>(Messages.InvalidNameError);
+            }
+            
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(),Messages.Succeed);
         }
 
-        public Brand GetBrandByBrandId(int brandId)
+        public IDataResult<Brand> GetBrandByBrandId(int brandId)
         {
-            return _brandDal.Get(b=>b.BrandId== brandId);
+            if (DateTime.Now.Hour == 18)
+            {
+                return new ErrorDataResult<Brand>(Messages.InvalidNameError);
+            }
+            
+            return new SuccessDataResult<Brand>(_brandDal.Get(b=>b.BrandId ==brandId),Messages.Succeed);
         }
 
-        public void Update(Brand brand)
+        public IResult Update(Brand brand)
         {
-            _brandDal.Update(brand);
+            throw new NotImplementedException();
         }
     }
 }
