@@ -14,11 +14,11 @@ namespace Business.ValidationRules.FluentValidation
 
         public CarValidator()
         {
-            RuleFor(c=>c.DailyPrice).GreaterThanOrEqualTo(100);
+            
             RuleFor(c => c.Description).NotEmpty();
             RuleFor(c=>c.ModelYear).Must(StartsWith2);
+            RuleFor(c=>c.DailyPrice).GreaterThan(100);
             RuleFor(c => c.DailyPrice).GreaterThanOrEqualTo(400).When(c => c.BrandId == 2);
-
            
         }
 
