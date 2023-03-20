@@ -20,5 +20,6 @@ namespace DataAccess.Conctrete.EfMemory
         public DbSet<User> User { get; set; }
         public DbSet<Rental> Rental { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<CarImage> CarImages { get; set; }
     }
 }

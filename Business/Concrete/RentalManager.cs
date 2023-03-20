@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
-using Business.Constants;
+using Business.Constants.Messages;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Conctrete.EfMemory;
@@ -28,7 +30,7 @@ namespace Business.Concrete
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.Succeed);
         }
-
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Delete(Rental rental)
         {
             if (DateTime.Now.Hour == 18)

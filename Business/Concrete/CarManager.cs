@@ -1,5 +1,6 @@
-﻿using Business.Abstract;
-using Business.Constants;
+﻿using Autofac;
+using Business.Abstract;
+using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
@@ -18,19 +19,24 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
+        
         public CarManager(ICarDal carDal)
         {
             _carDal = carDal;
+            
         }
 
-
+        //loglamak : yapilan operasyonda bir yerde kaydini tutmak
 
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
             
+
+
             _carDal.Add(car);
             return new SuccessResult(Messages.Succeed);
+
         }
 
         public IResult Delete(Car car)
@@ -82,5 +88,16 @@ namespace Business.Concrete
             _carDal.Update(car);
             return new SuccessResult(Messages.Succeed);
         }
+        private IResult CheckIfCarNameExists(string description)
+        {
+            var text = _carDal.Get(c=>c.Description == description);
+
+            if (text != null)
+            {
+                return new SuccessResult(Messages.Succeed);
+            }
+            return new ErrorResult(Messages.NameAlreadyExists);
+        }
+
     }
 }

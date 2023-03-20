@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Constants\PathConstants\" />
     <Folder Include="DependencyResolver\Autofac\" />
   </ItemGroup>
 
