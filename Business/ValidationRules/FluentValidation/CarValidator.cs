@@ -19,7 +19,6 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(c=>c.ModelYear).Must(StartsWith2);
             RuleFor(c=>c.DailyPrice).GreaterThan(100);
             RuleFor(c => c.DailyPrice).GreaterThanOrEqualTo(400).When(c => c.BrandId == 2);
-           
         }
 
         private bool StartsWith2(string arg)
