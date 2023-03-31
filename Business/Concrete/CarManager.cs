@@ -35,14 +35,15 @@ namespace Business.Concrete
         public IResult Add(Car car)
         {
             var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
-            if (DateTime.Now.Hour ==05)
-            {
-                return new ErrorResult(Messages.MaintenanceTime);
-            }
             if (result != null)
             {
                 return new ErrorResult(result.Message);
             }
+            if (DateTime.Now.Hour ==05)
+            {
+                return new ErrorResult(Messages.MaintenanceTime);
+            }
+            
             _carDal.Add(car);
             return new SuccessResult(Messages.Succeed);
 
@@ -101,7 +102,7 @@ namespace Business.Concrete
         {
             var text = _carDal.Get(c=>c.Description == description);
 
-            if (text != null)
+            if (text == null)
             {
                 return new SuccessResult(Messages.Succeed);
             }
