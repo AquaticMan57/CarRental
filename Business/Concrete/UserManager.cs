@@ -1,11 +1,15 @@
 ﻿using Business.Abstract;
 using Business.Constants.Messages;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Conctrete.EfMemory;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,24 +23,19 @@ namespace Business.Concrete
         {
             _userDal = userDal;
         }
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
-            if (DateTime.Now.Hour == 18)
-            {
-                return new ErrorResult(Messages.MaintenanceTime);
-            }
+
+
             _userDal.Add(user);
-            return new SuccessResult(Messages.Succeed);
+            return new SuccessResult();
         }
 
         public IResult Delete(User user)
         {
-            if (DateTime.Now.Hour == 18)
-            {
-                return new ErrorResult(Messages.MaintenanceTime);
-            }
             _userDal.Delete(user);
-            return new SuccessResult(Messages.Succeed);
+            return new SuccessResult(UserMessages.UserDeleted);
         }
 
         public IDataResult<List<User>> GetAll()
@@ -46,6 +45,17 @@ namespace Business.Concrete
                 return new ErrorDataResult<List<User>>(Messages.MaintenanceTime);
             }
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.Succeed);
+        }
+
+        public IDataResult<User> GetByMail(string mail)
+        {
+            return new SuccessDataResult<User>(_userDal.Get(u=>u.Email == mail),Messages.Succeed);
+        }
+
+        public IDataResult<List<OperationClaim>> GetOperationClaims(User user)
+        {
+            var operationResult = _userDal.GetOperationClaims(user);
+            return new SuccessDataResult<List<OperationClaim>>(operationResult, OperationClaimsMessage.OperationClaimsListed);
         }
 
         public IDataResult<User> GetUserById(int id)
@@ -59,12 +69,8 @@ namespace Business.Concrete
 
         public IResult Update(User user)
         {
-            if (DateTime.Now.Hour == 18)
-            {
-                return new ErrorResult(Messages.MaintenanceTime);
-            }
             _userDal.Update(user);
-            return new SuccessResult(Messages.Succeed);
+            return new SuccessResult(UserMessages.UserUpdated);
         }
     }
 }

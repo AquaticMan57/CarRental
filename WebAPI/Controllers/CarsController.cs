@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
@@ -15,7 +16,7 @@ namespace WebAPI.Controllers
         {
             _carService = carService;
         }
-
+        [Authorize]
         [HttpGet("getall")]
         public IActionResult GetCars()
         {
@@ -28,7 +29,14 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
         [HttpGet("getbycolorid")]
-        public IActionResult GetCarByColorId(int id) { var result = _carService.GetCarsByColorId(id); if (result.Success) { return Ok(result); }; return BadRequest(result); }
+        public IActionResult GetCarByColorId(int id) 
+        { var result = _carService.GetCarsByColorId(id);
+            if (result.Success) 
+            { 
+                return Ok(result); 
+            }; 
+            return BadRequest(result); 
+        }
         [HttpGet("getbybrandid")]
         public IActionResult GetCarsByBrandId(int id)
         {
@@ -41,7 +49,7 @@ namespace WebAPI.Controllers
             var result = _carService.GetCarDetails();
             if (result.Success) { return Ok(result); };return BadRequest(result);
         }
-
+        [Authorize]
         [HttpPost("add")]
         public IActionResult Add(Car car) 
         {
@@ -49,6 +57,7 @@ namespace WebAPI.Controllers
             if (result.Success) { return Ok(result); }
             return BadRequest(result);
         }
+        [Authorize]
         [HttpPost("delete")]
         public IActionResult Delete(Car car)
         {
@@ -56,6 +65,7 @@ namespace WebAPI.Controllers
             if (result.Success) { return Ok(result); }
             return BadRequest(result);
         }
+        [Authorize]
         [HttpPost("update")]
         public IActionResult Update(Car car)
         {

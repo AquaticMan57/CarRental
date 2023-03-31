@@ -35,14 +35,12 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarImageValidator))]
         public IResult Add(IFormFile file,CarImage carImage)
         {
-
             var result = BusinessRules.Run(CheckIfCarImagesLimit(carImage.CarId));
 
             if (result != null)
             {
                 return result;
             }
-
             carImage.ImagePath = _fileHelper.Upload(file,PathConstant.ImagePath);
             carImage.Date = DateTime.Now;
             _carImageDal.Add(carImage);

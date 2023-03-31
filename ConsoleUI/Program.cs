@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Concrete;
 using Business.Constants;
+using Core.Entities.Concrete;
 using DataAccess.Conctrete.EfMemory;
 using DataAccess.Conctrete.InMemory;
 using Entities.Concrete;
@@ -27,10 +28,10 @@ namespace ReCapProject
             //});
             ColorManager colorManager = new ColorManager(new EfColorDal());
 
-            var result = brandManager.Add(new Brand
+            var result = brandManager.Delete(new Brand
             {
-                BrandId=4,
-                BrandName = "Ferrari",
+                BrandId = 3,
+                BrandName = "Volvo",
                 
                 
             });
@@ -38,6 +39,10 @@ namespace ReCapProject
             if (result.Success)
             {
                 Console.WriteLine(result);
+                foreach (var item in brandManager.GetAll().Data)
+                {
+                    Console.WriteLine(item.BrandName);
+                }
             }
             else
             {
@@ -69,46 +74,47 @@ namespace ReCapProject
             //{
             //    Console.WriteLine(item.ColorName + " \t" + item.ColorId);
             //}
+            Console.ReadLine();
         }
 
-        private static void DataTableAddingSystem()
-        {
-            BrandManager brandManager = new BrandManager(new EfBrandDal());
-            CarManager carManager = new CarManager(new EfCarDal());
-            ColorManager colorManager = new ColorManager(new EfColorDal());
-            RentalManager rentalManager = new RentalManager(new EfRentalDal());
-            UserManager userManager = new UserManager(new EfUserDal());
-            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
-            int i = 1;
-            while (true)
-            {
+        //private static void DataTableAddingSystem()
+        //{
+        //    BrandManager brandManager = new BrandManager(new EfBrandDal());
+        //    CarManager carManager = new CarManager(new EfCarDal());
+        //    ColorManager colorManager = new ColorManager(new EfColorDal());
+        //    RentalManager rentalManager = new RentalManager(new EfRentalDal());
+        //    UserManager userManager = new UserManager(new EfUserDal());
+        //    CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+        //    int i = 1;
+        //    while (true)
+        //    {
                 
-                string userFirstName="";
-                string userLastName = "";
-                string Email = "";
-                string Password = "";
-                Console.WriteLine("Isminizi giriniz :");
-                userFirstName = Console.ReadLine();
-                Console.WriteLine("Soyadinizi giriniz :");
-                userLastName = Console.ReadLine();
-                Console.WriteLine("Email giriniz :");
-                Email = Console.ReadLine();
-                Console.WriteLine("Sifre giriniz :");
-                Password = Console.ReadLine();
+        //        string userFirstName="";
+        //        string userLastName = "";
+        //        string Email = "";
+        //        string Password = "";
+        //        Console.WriteLine("Isminizi giriniz :");
+        //        userFirstName = Console.ReadLine();
+        //        Console.WriteLine("Soyadinizi giriniz :");
+        //        userLastName = Console.ReadLine();
+        //        Console.WriteLine("Email giriniz :");
+        //        Email = Console.ReadLine();
+        //        Console.WriteLine("Sifre giriniz :");
+        //        Password = Console.ReadLine();
 
 
 
 
-                userManager.Add(new User()
-                {
-                    Email = Email,
-                    FirstName = userFirstName,
-                    LastName = userLastName,
-                    Id = i,
-                    Password = Password
-                });
-                i++;
-            }
+        //        userManager.Add(new User()
+        //        {
+        //            Email = Email,
+        //            FirstName = userFirstName,
+        //            LastName = userLastName,
+        //            Id = i,
+        //            Password = Password
+        //        });
+        //        i++;
+        //    }
 
             
 
@@ -117,29 +123,28 @@ namespace ReCapProject
 
         }
 
-        private static void GetCarDetails()
-        {
-            CarManager manager = new CarManager(new EfCarDal());
-            if (manager.GetCarDetails().Success == true)
-            {
-                foreach (var item in manager.GetCarDetails().Data)
-                {
-                    Console.WriteLine(item.ColorName + "\t " + item.BrandName + "\t" + item.ModelYear + "\t" + item.DailyPrice);
-                }
-            }
-            else
-            {
-                Console.WriteLine(manager.GetCarDetails().Message);
-            }
-        }
+        //private static void GetCarDetails()
+        //{
+        //    CarManager manager = new CarManager(new EfCarDal());
+        //    if (manager.GetCarDetails().Success == true)
+        //    {
+        //        foreach (var item in manager.GetCarDetails().Data)
+        //        {
+        //            Console.WriteLine(item.ColorName + "\t " + item.BrandName + "\t" + item.ModelYear + "\t" + item.DailyPrice);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine(manager.GetCarDetails().Message);
+        //    }
+        //}
 
-        private static void AddingNewColor(ColorManager colorManager)
-        {
-            colorManager.Add(new Colors
-            {
-                Id = 1,
-                ColorName = "Beyaz"
-            });
-        }
+        //private static void AddingNewColor(ColorManager colorManager)
+        //{
+        //    colorManager.Add(new Colors
+        //    {
+        //        Id = 1,
+        //        ColorName = "Beyaz"
+        //    });
+        //}
     }
-}

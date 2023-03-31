@@ -1,8 +1,10 @@
 ﻿using Autofac;
 using Business.Abstract;
+using Business.BusinessAspect;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.BusinessRules;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Conctrete.InMemory;
@@ -27,13 +29,20 @@ namespace Business.Concrete
         }
 
         //loglamak : yapilan operasyonda bir yerde kaydini tutmak
-
+        
+        //[SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            
-
-
+            var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
+            if (DateTime.Now.Hour ==05)
+            {
+                return new ErrorResult(Messages.MaintenanceTime);
+            }
+            if (result != null)
+            {
+                return new ErrorResult(result.Message);
+            }
             _carDal.Add(car);
             return new SuccessResult(Messages.Succeed);
 

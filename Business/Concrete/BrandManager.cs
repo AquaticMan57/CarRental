@@ -39,9 +39,9 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Succeed);
         }
 
-        public IDataResult<List<Brand>> GetAllBrands()
+        public IDataResult<List<Brand>> GetAll()
         {
-            if (DateTime.Now.Hour == 18)
+            if (DateTime.Now.Hour == 05)
             {
                 return new ErrorDataResult<List<Brand>>(Messages.InvalidNameError);
             }
