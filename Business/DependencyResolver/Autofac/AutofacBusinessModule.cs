@@ -6,7 +6,6 @@ using Castle.DynamicProxy;
 using Core.Utilities.Helpers.FileHelpers;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstract;
-using DataAccess.Conctrete.EfMemory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Utilities.Security.Jwt;
 using Microsoft.AspNetCore.Http;
+using DataAccess.Concrete.EfMemory;
 
 namespace Business.DependencyResolver.Autofac
 {

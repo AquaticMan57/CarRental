@@ -2,8 +2,7 @@
 using Business.Concrete;
 using Business.Constants;
 using Core.Entities.Concrete;
-using DataAccess.Conctrete.EfMemory;
-using DataAccess.Conctrete.InMemory;
+using DataAccess.Concrete.EfMemory;
 using Entities.Concrete;
 using System;
 namespace ReCapProject

@@ -3,6 +3,7 @@ using Business.Constants.Messages;
 using Business.Constants.Path;
 using Business.ValidationRules.FluentValidation;
 using Castle.Core.Internal;
+using Core.Aspects.Autofac.Performances;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.BusinessRules;
 using Core.Utilities.Helpers.FileHelpers;
@@ -31,8 +32,10 @@ namespace Business.Concrete
             _fileHelper = fileHelper;
             
         }
-
+        
         [ValidationAspect(typeof(CarImageValidator))]
+        [PerformanceAspect(10)]
+
         public IResult Add(IFormFile file,CarImage carImage)
         {
             var result = BusinessRules.Run(CheckIfCarImagesLimit(carImage.CarId));
@@ -48,6 +51,8 @@ namespace Business.Concrete
             
         }
         [ValidationAspect(typeof(CarImageValidator))]
+        [PerformanceAspect(10)]
+
         public IResult Delete(CarImage carImage)
         {
             if (DateTime.Now.Hour == 05)
@@ -59,6 +64,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Succeed);
         }
         [ValidationAspect(typeof(CarImageValidator))]
+        [PerformanceAspect(10)]
+
         public IDataResult<List<CarImage>> GetAll()
         {
             IResult result = BusinessRules.Run(CheckTheMaintenanceTime());
@@ -70,6 +77,8 @@ namespace Business.Concrete
 
         }
         [ValidationAspect(typeof(CarImageValidator))]
+        [PerformanceAspect(10)]
+
         public IDataResult<CarImage> GetById(int id)
         {
             
@@ -80,7 +89,14 @@ namespace Business.Concrete
             return new SuccessDataResult<CarImage>(_carImageDal.Get(c=>c.Id == id));
         }
 
+        public IResult Transaction(CarImage carImage)
+        {
+            throw new NotImplementedException();
+        }
+
         [ValidationAspect(typeof(CarImageValidator))]
+        [PerformanceAspect(10)]
+
         public IResult Update(IFormFile file,CarImage carImage)
         {
             IResult result = BusinessRules.Run(CheckTheDateTime(carImage.Id),

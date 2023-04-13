@@ -1,8 +1,12 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspect;
 using Business.Constants.Messages;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performances;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
-using DataAccess.Conctrete.EfMemory;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -19,6 +23,11 @@ namespace Business.Concrete
         {
             _colordal = colordal;
         }
+        [SecuredOperation("add,admin")]
+        [CacheRemoveAspect("IColorsService.Get")]
+        [ValidationAspect(typeof(ColorsValidator))]
+        [PerformanceAspect(10)]
+
 
         public IResult Add(Colors colors)
         {
@@ -29,6 +38,11 @@ namespace Business.Concrete
             _colordal.Add(colors);
             return new SuccessResult(Messages.Succeed);
         }
+        [SecuredOperation("delete,admin")]
+        [CacheRemoveAspect("IColorsService.Get")]
+        [ValidationAspect(typeof(ColorsValidator))]
+        [PerformanceAspect(10)]
+
 
         public IResult Delete(Colors colors)
         {
@@ -38,6 +52,10 @@ namespace Business.Concrete
             }
             return new SuccessResult(Messages.Succeed);
         }
+        [SecuredOperation("list,admin")]
+        [CacheAspect]
+        [PerformanceAspect(10)]
+
 
         public IDataResult<List<Colors>> GetAllColors()
         {
@@ -47,6 +65,10 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<List<Colors>>(_colordal.GetAll(),Messages.Succeed);
         }
+        [SecuredOperation("list,admin")]
+        [CacheAspect]
+        [PerformanceAspect(10)]
+
 
         public IDataResult<Colors> GetColorById(int id)
         {
@@ -56,6 +78,17 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<Colors>(_colordal.Get(c=>c.Id==id), Messages.Succeed);
         }
+
+        public IResult Transaction(Colors colors)
+        {
+            throw new NotImplementedException();
+        }
+
+        [ValidationAspect(typeof(ColorsValidator))]
+        [SecuredOperation("update,admin")]
+        [CacheRemoveAspect("IColorsService.Get")]
+        [PerformanceAspect(10)]
+
 
         public IResult Update(Colors colors)
         {

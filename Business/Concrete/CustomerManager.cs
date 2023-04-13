@@ -1,5 +1,8 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspect;
 using Business.Constants.Messages;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performances;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -18,6 +21,9 @@ namespace Business.Concrete
         {
             _customerDal= customerDal;
         }
+        [CacheRemoveAspect("ICarService.Get")]
+        [PerformanceAspect(10)]
+        [SecuredOperation("add,admin")]
 
         public IResult Add(Customer customer)
         {
@@ -28,6 +34,9 @@ namespace Business.Concrete
             _customerDal.Add(customer);
             return new SuccessResult(Messages.Succeed);
         }
+        [CacheRemoveAspect("ICarService.Get")]
+        [PerformanceAspect(10)]
+        [SecuredOperation("delete,admin")]
 
         public IResult Delete(Customer customer)
         {
@@ -38,6 +47,9 @@ namespace Business.Concrete
             _customerDal.Delete(customer);
             return new SuccessResult(Messages.Succeed);
         }
+        [PerformanceAspect(10)]
+        [CacheAspect]
+        [SecuredOperation("list,admin")]
 
         public IDataResult<List<Customer>> GetAll()
         {
@@ -47,6 +59,10 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(),Messages.Succeed);
         }
+
+        [PerformanceAspect(10)]
+        [SecuredOperation("list,admin")]
+        [CacheAspect]
         public IDataResult<Customer> GetCustomerById(int customerId)
         {
             if (DateTime.Now.Hour == 18)
@@ -55,6 +71,15 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<Customer>(_customerDal.Get(c=>c.CustomerId== customerId),Messages.Succeed);
         }
+
+        public IResult Transaction(Customer customer)
+        {
+            throw new NotImplementedException();
+        }
+
+        [SecuredOperation("update,admin")]
+        [PerformanceAspect(10)]
+        [CacheRemoveAspect("ICarService.Get")]
 
         public IResult Update(Customer customer)
         {

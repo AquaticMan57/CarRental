@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Conctrete.EfMemory
+namespace DataAccess.Concrete.EfMemory
 {
     public class EfBrandDal : EfEntityRepositoryBase<Brand,NorthwindContext>,IBrandDal
     {

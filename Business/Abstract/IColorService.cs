@@ -16,6 +16,7 @@ namespace Business.Abstract
         IResult Add(Colors colors);
         IResult Delete(Colors colors);
         IResult Update(Colors colors);
+        IResult Transaction(Colors colors);
 
     }
 }

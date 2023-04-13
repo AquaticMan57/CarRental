@@ -40,6 +40,8 @@ namespace Business.Constants.Messages
 
         public static string UserNotFound = "Kullanici bulunamadi!!";
         public static string PasswordError = "Sifre yanlis";
+
+        public static string UserAdded { get; internal set; }
     }
     public class AccessTokenMessages : Messages
     {
@@ -49,4 +51,5 @@ namespace Business.Constants.Messages
     {
         public static string AuthorizationDenied = "Kisisel tanimlama algilanamadi";
     }
+    
 }

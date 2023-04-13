@@ -1,10 +1,11 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspect;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
-using DataAccess.Conctrete.EfMemory;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace Business.Concrete
         {
             _rentalDal= rentalDal;
         }
+
+        [CacheRemoveAspect("IRentalService.Get")]
+        [SecuredOperation("add,admin")]
+        [ValidationAspect(typeof(RentalValidator))]
+
         public IResult Add(Rental rental)
         {
             if (DateTime.Now.Hour == 18)
@@ -30,6 +36,8 @@ namespace Business.Concrete
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.Succeed);
         }
+        [CacheRemoveAspect("IRentalService.Get")]
+        [SecuredOperation("delete,admin")]
         [ValidationAspect(typeof(RentalValidator))]
         public IResult Delete(Rental rental)
         {
@@ -41,6 +49,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Succeed);
         }
 
+        [CacheAspect]
+        [SecuredOperation("list,admin")]
         public IDataResult<List<Rental>> GetAll()
         {
             if (DateTime.Now.Hour == 18)
@@ -49,7 +59,8 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.Succeed);
         }
-
+        [CacheAspect]
+        [SecuredOperation("list,admin")]
         public IDataResult<Rental> GetRentalById(int id)
         {
             if (DateTime.Now.Hour == 18)
@@ -58,6 +69,15 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<Rental>(_rentalDal.Get(c => c.Id == id), Messages.Succeed);
         }
+
+        public IResult Transaction(Rental rental)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CacheRemoveAspect("ICarService.Get")]
+        [SecuredOperation("update,admin")]
+        [ValidationAspect(typeof(RentalValidator))]
 
         public IResult Update(Rental rental)
         {
