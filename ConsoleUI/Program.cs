@@ -27,20 +27,22 @@ namespace ReCapProject
             //});
             ColorManager colorManager = new ColorManager(new EfColorDal());
 
-            var result = brandManager.Delete(new Brand
+            var result = rentalManager.Add(new Rental
             {
-                BrandId = 3,
-                BrandName = "Volvo",
                 
-                
-            });
+                CarId = 2,
+                CustomerId = 2,
+                RentDate = DateTime.Now,
+                ReturnDate = DateTime.Today.AddMonths(2)
+
+            }); 
 
             if (result.Success)
             {
                 Console.WriteLine(result);
-                foreach (var item in brandManager.GetAll().Data)
+                foreach (var item in rentalManager.GetAll().Data)
                 {
-                    Console.WriteLine(item.BrandName);
+                    Console.WriteLine(item);
                 }
             }
             else

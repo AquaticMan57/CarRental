@@ -52,8 +52,8 @@ namespace Business.Concrete
             }
             return new SuccessResult(Messages.Succeed);
         }
-        [SecuredOperation("list,admin")]
-        [CacheAspect]
+        //[SecuredOperation("list,admin")]
+        //[CacheAspect]
         [PerformanceAspect(10)]
 
 

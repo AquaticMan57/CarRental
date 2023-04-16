@@ -2,11 +2,13 @@
 using Business.BusinessAspect;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
+using Castle.Core.Internal;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTO_s;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +52,7 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        [SecuredOperation("list,admin")]
+        //[SecuredOperation("list,admin")]
         public IDataResult<List<Rental>> GetAll()
         {
             if (DateTime.Now.Hour == 18)
@@ -68,6 +70,17 @@ namespace Business.Concrete
                 return new ErrorDataResult<Rental>(Messages.MaintenanceTime);
             }
             return new SuccessDataResult<Rental>(_rentalDal.Get(c => c.Id == id), Messages.Succeed);
+        }
+        //[CacheAspect]
+        //[SecuredOperation("list,admin")]
+        public IDataResult<List<RentalDetailsDto>> GetRentalDetails()
+        {
+            var result = _rentalDal.GetRentalDetailsDto();
+            if (result.IsNullOrEmpty())
+            {
+                return new ErrorDataResult<List<RentalDetailsDto>>(RentalMessages.NoDto);
+            }
+            return new SuccessDataResult<List<RentalDetailsDto>>(result,RentalMessages.RentalDetailDtoListed);
         }
 
         public IResult Transaction(Rental rental)

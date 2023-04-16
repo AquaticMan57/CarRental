@@ -1,4 +1,5 @@
-﻿using Core.DataAccess.EntityFramework;
+﻿using Castle.Core.Resource;
+using Core.DataAccess.EntityFramework;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTO_s;
@@ -25,8 +26,8 @@ namespace DataAccess.Concrete.EfMemory
                              join co in context.Colors
                              on c.ColorId equals co.Id
                              select new CarDetailDto 
-                             { 
-                                 
+                             {
+                                 CarId=c.Id,
                                  BrandName=b.BrandName,
                                  DailyPrice=c.DailyPrice,
                                  

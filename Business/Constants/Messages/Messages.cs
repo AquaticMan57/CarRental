@@ -51,5 +51,12 @@ namespace Business.Constants.Messages
     {
         public static string AuthorizationDenied = "Kisisel tanimlama algilanamadi";
     }
-    
+    public class RentalMessages : Messages
+    {
+        public static string RentalDetailDtoListed = "Kiralamalar listelendi!!";
+        public static string NoDto = "Listelemede bir sey gozukmedi!!!";
+
+
+    }
+
 }

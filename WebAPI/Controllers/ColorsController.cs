@@ -21,9 +21,9 @@ namespace WebAPI.Controllers
             if (result.Success)
             {
                 return Ok(result);
-
+                
             }
-            return BadRequest(result);
+            return BadRequest(result.Message);
         }
         [HttpGet("getbycolorid")]
         public IActionResult Get(int id)

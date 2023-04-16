@@ -16,7 +16,7 @@ namespace WebAPI.Controllers
         {
             _carService = carService;
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet("getall")]
         public IActionResult GetCars()
         {
@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
-            return BadRequest(result);
+            return BadRequest(result.Message);
         }
         [HttpGet("getbycolorid")]
         public IActionResult GetCarByColorId(int id) 
@@ -49,7 +49,6 @@ namespace WebAPI.Controllers
             var result = _carService.GetCarDetails();
             if (result.Success) { return Ok(result); };return BadRequest(result);
         }
-        [Authorize]
         [HttpPost("add")]
         public IActionResult Add(Car car) 
         {
@@ -57,7 +56,6 @@ namespace WebAPI.Controllers
             if (result.Success) { return Ok(result); }
             return BadRequest(result);
         }
-        [Authorize]
         [HttpPost("delete")]
         public IActionResult Delete(Car car)
         {
@@ -65,7 +63,6 @@ namespace WebAPI.Controllers
             if (result.Success) { return Ok(result); }
             return BadRequest(result);
         }
-        [Authorize]
         [HttpPost("update")]
         public IActionResult Update(Car car)
         {

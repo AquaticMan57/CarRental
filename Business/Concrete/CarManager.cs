@@ -83,9 +83,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.DailyPrice>=min && c.DailyPrice<=max),Messages.Succeed);
         }
 
-        [SecuredOperation("list,admin")]
+        //[SecuredOperation("list,admin")]
         [ValidationAspect(typeof(CarValidator))]
-        [CacheAspect]
+        //[CacheAspect]
         [PerformanceAspect(10)]
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
@@ -97,10 +97,10 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarsDetail(),Messages.Succeed);
         }
 
-        [SecuredOperation("list,admin")]
-        [ValidationAspect(typeof(CarValidator))]
-        [CacheAspect]
-        [PerformanceAspect(10)]
+        //[SecuredOperation("list,admin")]
+        //[ValidationAspect(typeof(CarValidator))]
+        //[CacheAspect]
+        //[PerformanceAspect(10)]
 
         public IDataResult<List<Car>> GetCars()
         {

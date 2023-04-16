@@ -48,8 +48,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Succeed);
         }
         [PerformanceAspect(10)]
-        [CacheAspect]
-        [SecuredOperation("list,admin")]
+        //[CacheAspect]
+        //[SecuredOperation("list,admin")]
 
         public IDataResult<List<Customer>> GetAll()
         {

@@ -58,8 +58,8 @@ namespace Business.Concrete
             _brandDal.Delete(brand);
             return new SuccessResult(Messages.Succeed);
         }
-        [SecuredOperation("list,admin")]
-        [CacheAspect]
+        //[SecuredOperation("list,admin")]
+        //[CacheAspect]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(BrandValidator))]
         public IDataResult<List<Brand>> GetAll()
