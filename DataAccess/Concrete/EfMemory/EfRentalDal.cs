@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EfMemory
 {
-    public class EfRentalDal : EfEntityRepositoryBase<Rental , NorthwindContext>,IRentalDal
+    public class EfRentalDal : EfEntityRepositoryBase<Rental, NorthwindContext>, IRentalDal
     {
         public List<RentalDetailsDto> GetRentalDetailsDto()
         {
@@ -22,7 +22,7 @@ namespace DataAccess.Concrete.EfMemory
                              join r in context.Rentals
                              on c.Id equals r.CarId
                              join co in context.Colors
-                             on c.ColorId equals co.Id
+                             on c.ColorId equals co.ColorId
                              join cus in context.Customers
                              on r.CustomerId equals cus.CustomerId
                              join u in context.Users
@@ -40,10 +40,11 @@ namespace DataAccess.Concrete.EfMemory
                                  RentalId = r.Id,
                                  RentDate = r.RentDate,
                                  ReturnDate = r.ReturnDate,
-                                 UserName = u.FirstName +" "+ u.LastName,
+                                 UserName = u.FirstName + " " + u.LastName,
                              };
                 return result.ToList();
             }
         }
+        
     }
 }

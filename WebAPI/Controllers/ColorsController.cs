@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-            var result = _service.GetAllColors();
+            var result = _service.GetAll();
             if (result.Success)
             {
                 return Ok(result);
@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
-        [HttpGet("getbycolorid")]
+        [HttpGet("getbyid")]
         public IActionResult Get(int id)
         {
             var result = _service.GetColorById(id);

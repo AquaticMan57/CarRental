@@ -18,10 +18,10 @@ namespace WebAPI.Controllers
         }
         //[Authorize]
         [HttpGet("getall")]
-        public IActionResult GetCars()
+        public IActionResult GetAll()
         {
 
-            var result = _carService.GetCars();
+            var result = _carService.GetAll();
             if (result.Success)
             {
                 return Ok(result);
@@ -48,6 +48,47 @@ namespace WebAPI.Controllers
         {
             var result = _carService.GetCarDetails();
             if (result.Success) { return Ok(result); };return BadRequest(result);
+        }
+        [HttpGet("getcarsdetailbybrandid")]
+        public IActionResult GetCarsDetailByBrandId(int id)
+        {
+            var result = _carService.GetCarsDetailByBrandId(id);
+            if (result.Success) 
+            { 
+                return Ok(result); 
+            }; 
+            return BadRequest(result.Message);
+        }
+        [HttpGet("getcarsdetailbycolorid")]
+        public IActionResult GetCarsDetailByColorId(int id)
+        {
+            var result = _carService.GetCarsDetailByColorId(id);
+            if (result.Success) 
+            { 
+                return Ok(result); 
+            }
+            return BadRequest(result.Message);
+        }
+        [HttpGet("getcarsdetailbybrandidandcolorid")]
+        public IActionResult GetCarsDetailByBrandIdAndColorId(int id, int colorId)
+        {
+            var result = _carService.GetCarsDetailByBrandAndColorId(id, colorId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+        [HttpGet("getcardetailbycarid")]
+        public IActionResult GetCarDetailByCarId(int id)
+        {
+            var result = _carService.GetCarDetailByCarId(id);
+            if (result.Success)
+            {
+                return Ok(result);
+
+            }
+            return BadRequest(result.Message);
         }
         [HttpPost("add")]
         public IActionResult Add(Car car) 

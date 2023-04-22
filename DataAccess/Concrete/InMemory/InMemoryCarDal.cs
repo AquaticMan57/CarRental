@@ -21,7 +21,7 @@ namespace DataAccess.Concrete.InMemory
             {
                 new Car {ModelYear="1994",Id=1,Description="Tofas Sahin",DailyPrice=100,ColorId=1,BrandId=1},
                 new Car {ModelYear="2008",Id=2,Description="Volkswagen Caddy",DailyPrice=250,ColorId=1,BrandId=2},
-                new Car {ModelYear="2016",Id=3,Description="Volkswagen Tiguan",DailyPrice=350,ColorId=1,BrandId=2},
+                new Car {ModelYear="2016",  Id=3,Description="Volkswagen Tiguan",DailyPrice=350,ColorId=1,BrandId=2},
                 new Car {ModelYear="2018",Id=4,Description="Volkswagen Passat",DailyPrice=375,ColorId=2,BrandId=2},
                 new Car {ModelYear="2019",Id=5,Description="Fiat Egea",DailyPrice=300,ColorId=3,BrandId=3}
 
@@ -66,12 +66,37 @@ namespace DataAccess.Concrete.InMemory
             
         }
 
+        public CarDetailDto GetCarDetail(int carId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarDetailByCarId(int carId)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Car> GetCars()
         {
             return _cars;
         }
 
         public List<CarDetailDto> GetCarsDetail()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarsDetailBrandAndColorId(int brandId, int colorId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarsDetailByBrandId(int brandId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarsDetailByColorId(int colorId)
         {
             throw new NotImplementedException();
         }
@@ -89,6 +114,11 @@ namespace DataAccess.Concrete.InMemory
 
             }
 
+        }
+
+        List<CarDetailDto> ICarDal.GetCarDetailByCarId(int carId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

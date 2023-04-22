@@ -25,18 +25,18 @@ namespace Business.Concrete
     {
         ICarImageDal _carImageDal;
         IFileHelper _fileHelper;
-        
-        public CarImageManager(ICarImageDal carImageDal,IFileHelper fileHelper)
+
+        public CarImageManager(ICarImageDal carImageDal, IFileHelper fileHelper)
         {
-            _carImageDal= carImageDal;
+            _carImageDal = carImageDal;
             _fileHelper = fileHelper;
-            
+
         }
-        
+
         [ValidationAspect(typeof(CarImageValidator))]
         [PerformanceAspect(10)]
 
-        public IResult Add(IFormFile file,CarImage carImage)
+        public IResult Add(IFormFile file, CarImage carImage)
         {
             var result = BusinessRules.Run(CheckIfCarImagesLimit(carImage.CarId));
 
@@ -44,11 +44,11 @@ namespace Business.Concrete
             {
                 return result;
             }
-            carImage.ImagePath = _fileHelper.Upload(file,PathConstant.ImagePath);
+            carImage.ImagePath = _fileHelper.Upload(file, PathConstant.ImagePath);
             carImage.Date = DateTime.Now;
             _carImageDal.Add(carImage);
             return new SuccessResult(CarImagesMessage.CarImageAdded);
-            
+
         }
         [ValidationAspect(typeof(CarImageValidator))]
         [PerformanceAspect(10)]
@@ -81,12 +81,24 @@ namespace Business.Concrete
 
         public IDataResult<CarImage> GetById(int id)
         {
-            
+
             if (DateTime.Now.Hour == 05)
             {
                 return new ErrorDataResult<CarImage>();
             }
-            return new SuccessDataResult<CarImage>(_carImageDal.Get(c=>c.Id == id));
+            return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.Id == id));
+        }
+        
+        public IDataResult<List<CarImage>> GetDefaultImage(int carId)
+        {
+            List<CarImage> carImages = new List<CarImage>();
+            carImages.Add(new CarImage
+            {
+                CarId = carId,
+                ImagePath = PathConstant.ImagePath +  @"Images\\defaultCar.jpg",
+                Date = DateTime.Now
+            });
+            return new SuccessDataResult<List<CarImage>>(carImages, Messages.Succeed);
         }
 
         public IResult Transaction(CarImage carImage)
@@ -105,7 +117,7 @@ namespace Business.Concrete
             {
                 return result;
             }
-            _fileHelper.Update(file,carImage.ImagePath,PathConstant.ImagePath);
+            _fileHelper.Update(file,PathConstant.ImagePath + carImage.ImagePath,PathConstant.ImagePath);
             _carImageDal.Update(carImage);
             return new SuccessResult(Messages.Succeed);
         }

@@ -2,6 +2,7 @@
 using Business.Concrete;
 using Business.Constants;
 using Core.Entities.Concrete;
+using Core.Utilities.Results;
 using DataAccess.Concrete.EfMemory;
 using Entities.Concrete;
 using System;
@@ -13,7 +14,7 @@ namespace ReCapProject
         {
             BrandManager brandManager = new BrandManager(new EfBrandDal());
             CarManager carManager = new CarManager(new EfCarDal());
-            
+
             RentalManager rentalManager = new RentalManager(new EfRentalDal());
             UserManager userManager = new UserManager(new EfUserDal());
             CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
@@ -25,22 +26,21 @@ namespace ReCapProject
             //    CompanyName ="Savas ltd sti"
 
             //});
-            ColorManager colorManager = new ColorManager(new EfColorDal());
-
-            var result = rentalManager.Add(new Rental
+            var result = carManager.Add(new Car
             {
+                BrandId= 1,
+                ColorId= 1,
+                DailyPrice= 250,
+                ModelYear="2014",
+                Description="Volkswagen Tiguan"
                 
-                CarId = 2,
-                CustomerId = 2,
-                RentDate = DateTime.Now,
-                ReturnDate = DateTime.Today.AddMonths(2)
 
-            }); 
+            });
 
             if (result.Success)
             {
                 Console.WriteLine(result);
-                foreach (var item in rentalManager.GetAll().Data)
+                foreach (var item in carManager.GetAll().Data)
                 {
                     Console.WriteLine(item);
                 }
@@ -49,6 +49,25 @@ namespace ReCapProject
             {
                 Console.WriteLine(result.Message);
             }
+
+            //var result2 = colorManager.Add(new Colors
+            //{
+            //    ColorName="Beyaz"
+
+            //});
+
+            //if (result2.Success)
+            //{
+            //    Console.WriteLine(result2);
+            //    foreach (var item in carManager.GetAll().Data)
+            //    {
+            //        Console.WriteLine(item);
+            //    }
+            //}
+            //else
+            //{
+            //    Console.WriteLine(result2.Message);
+            //}
 
 
             //rentalManager.Delete(new Rental
@@ -78,6 +97,11 @@ namespace ReCapProject
             Console.ReadLine();
         }
 
+        private static IResult CarAddingSystem(CarManager carManager)
+        {
+           throw new Exception();
+        }
+
         //private static void DataTableAddingSystem()
         //{
         //    BrandManager brandManager = new BrandManager(new EfBrandDal());
@@ -89,7 +113,7 @@ namespace ReCapProject
         //    int i = 1;
         //    while (true)
         //    {
-                
+
         //        string userFirstName="";
         //        string userLastName = "";
         //        string Email = "";
@@ -117,12 +141,12 @@ namespace ReCapProject
         //        i++;
         //    }
 
-            
 
 
 
 
-        }
+
+    }
 
         //private static void GetCarDetails()
         //{

@@ -23,18 +23,15 @@ namespace Business.Concrete
         {
             _colordal = colordal;
         }
-        [SecuredOperation("add,admin")]
-        [CacheRemoveAspect("IColorsService.Get")]
-        [ValidationAspect(typeof(ColorsValidator))]
-        [PerformanceAspect(10)]
+        //[SecuredOperation("add,admin")]
+        //[CacheRemoveAspect("IColorsService.Get")]
+        //[ValidationAspect(typeof(ColorsValidator))]
+        //[PerformanceAspect(10)]
 
 
         public IResult Add(Colors colors)
         {
-            if (colors.ColorName.Length<3)
-            {
-                return new ErrorResult(Messages.InvalidNameError);
-            }
+            
             _colordal.Add(colors);
             return new SuccessResult(Messages.Succeed);
         }
@@ -57,7 +54,7 @@ namespace Business.Concrete
         [PerformanceAspect(10)]
 
 
-        public IDataResult<List<Colors>> GetAllColors()
+        public IDataResult<List<Colors>> GetAll()
         {
             if (DateTime.Now.Hour == 18)
             {
@@ -76,7 +73,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<Colors>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<Colors>(_colordal.Get(c=>c.Id==id), Messages.Succeed);
+            return new SuccessDataResult<Colors>(_colordal.Get(c=>c.ColorId ==id), Messages.Succeed);
         }
 
         public IResult Transaction(Colors colors)

@@ -31,18 +31,18 @@ namespace Business.Concrete
         }
         //loglamak : yapilan operasyonda bir yerde kaydini tutmak
 
-        [SecuredOperation("add,admin")]
-        [CacheRemoveAspect("ICarService.Get")]
+        //[SecuredOperation("add,admin")]
+        //[CacheRemoveAspect("ICarService.Get")]
         [ValidationAspect(typeof(CarValidator))]
         [PerformanceAspect(10)]
 
         public IResult Add(Car car)
         {
-            var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
-            if (result != null)
-            {
-                return new ErrorResult(result.Message);
-            }
+            //var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
+            //if (result != null)
+            //{
+            //    return new ErrorResult(result.Message);
+            //}
             if (DateTime.Now.Hour ==05)
             {
                 return new ErrorResult(Messages.MaintenanceTime);
@@ -102,43 +102,33 @@ namespace Business.Concrete
         //[CacheAspect]
         //[PerformanceAspect(10)]
 
-        public IDataResult<List<Car>> GetCars()
+        public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(),CarMessages.CarsListed);
         }
 
-        [SecuredOperation("list,admin")]
+        //[SecuredOperation("list,admin")]
         [ValidationAspect(typeof(CarValidator))]
-        [CacheAspect]
+        //[CacheAspect]
         [PerformanceAspect(10)]
 
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.BrandId==brandId),Messages.Succeed);
+            
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.BrandId == brandId),Messages.Succeed);
         }
 
-        [SecuredOperation("list,admin")]
+        //[SecuredOperation("list,admin")]
         [ValidationAspect(typeof(CarValidator))]
-        [CacheAspect]
+        //[CacheAspect]
         [PerformanceAspect(10)]
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId),Messages.Succeed);
+            
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.ColorId == colorId),Messages.Succeed);
         }
 
-        public IResult Transaction(Car car)
-        {
-
-            Add(car);
-            if (car.DailyPrice < 10)
-            {
-                throw new Exception("");
-            }
-
-            Add(car);
-
-            return null;
-        }
+        
 
         [SecuredOperation("update,admin")]
         [CacheRemoveAspect("ICarService.Get")]
@@ -158,17 +148,47 @@ namespace Business.Concrete
             _carDal.Update(car);
             return new SuccessResult(Messages.Succeed);
         }
+        public IDataResult<List<CarDetailDto>> GetCarsDetailByBrandId(int brandId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarsDetailByBrandId(brandId), Messages.Succeed);
+        }
 
+        public IDataResult<List<CarDetailDto>> GetCarsDetailByColorId(int colorId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarsDetailByColorId(colorId));
+        }
+        public IDataResult<List<CarDetailDto>> GetCarsDetailByBrandAndColorId(int brandId, int colorId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarsDetailBrandAndColorId(brandId, colorId),Messages.Succeed);
+        }
+        public IDataResult<List<CarDetailDto>> GetCarDetailByCarId(int carId)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetailByCarId(carId),Messages.Succeed);
+        }
+        public IResult Transaction(Car car)
+        {
+
+            Add(car);
+            if (car.DailyPrice < 80)
+            {
+                throw new Exception("");
+            }
+
+            Add(car);
+
+            return null;
+        }
         private IResult CheckIfCarNameExists(string description)
         {
             var text = _carDal.Get(c=>c.Description == description);
 
             if (text == null)
             {
-                return null!;
+                return null;
             }
             return new ErrorResult(Messages.NameAlreadyExists);
         }
 
+       
     }
 }
