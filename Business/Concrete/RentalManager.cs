@@ -83,6 +83,13 @@ namespace Business.Concrete
             return new SuccessDataResult<List<RentalDetailsDto>>(result,RentalMessages.RentalDetailDtoListed);
         }
 
+        public IDataResult<List<RentalDetailsDto>> GetRentalDetailsDtosByCarId(int carId)
+        {
+            var result = _rentalDal.GetRentalDetailsDtosByCarId(carId);
+            return new SuccessDataResult<List<RentalDetailsDto>>(result, Messages.Succeed);
+
+        }
+
         public IResult Transaction(Rental rental)
         {
             throw new NotImplementedException();

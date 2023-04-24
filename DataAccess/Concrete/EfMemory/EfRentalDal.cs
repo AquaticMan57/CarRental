@@ -45,6 +45,43 @@ namespace DataAccess.Concrete.EfMemory
                 return result.ToList();
             }
         }
+        public List<RentalDetailsDto> GetRentalDetailsDtosByCarId(int carId)
+        {
+            using (var context = new NorthwindContext())
+            {
+                var result = from c in context.Cars
+                             join b in context.Brands
+                             on c.BrandId equals b.BrandId
+                             join r in context.Rentals
+                             on c.Id equals r.CarId
+                             join co in context.Colors
+                             on c.ColorId equals co.ColorId
+                             join cus in context.Customers
+                             on r.CustomerId equals cus.CustomerId
+                             join u in context.Users
+                             on cus.UserId equals u.Id
+                             where c.Id == carId
+                             select new RentalDetailsDto
+                             {
+                                 CarId = carId,
+                                 BrandId = b.BrandId,
+                                 BrandName = b.BrandName,
+                                 ColorId = c.ColorId,
+                                 ColorName = co.ColorName,
+                                 CustomerId = cus.CustomerId,
+                                 Description = c.Description,
+                                 RentalId = r.Id,
+                                 RentDate = r.RentDate,
+                                 ReturnDate = r.ReturnDate,
+                                 UserName = u.FirstName + " " + u.LastName,
+
+
+
+                             };
+
+                return result.ToList();
+            }
+        }
         
     }
 }
