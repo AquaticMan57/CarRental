@@ -8,6 +8,7 @@ using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTO_s;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -54,7 +55,11 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.Succeed);
         }
-        
+        public IDataResult<List<UserDetailDto>> GetUserByCarId(int carId)
+        {
+            var result = _userDal.GetUserByCarId(carId);
+            return new SuccessDataResult<List<UserDetailDto>>(result);
+        }
         [CacheAspect]
         [SecuredOperation("list,admin")]
         public IDataResult<User> GetByMail(string mail)
@@ -72,6 +77,7 @@ namespace Business.Concrete
         }
 
         
+
         [CacheAspect]
         [SecuredOperation("list,admin")]
         public IDataResult<User> GetUserById(int id)
@@ -96,5 +102,7 @@ namespace Business.Concrete
             _userDal.Update(user);
             return new SuccessResult(UserMessages.UserUpdated);
         }
+
+        
     }
 }

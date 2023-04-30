@@ -101,6 +101,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(carImages, Messages.Succeed);
         }
 
+        public IDataResult<CarImage> GetImageByCarId(int carId)
+        {
+            var result = _carImageDal.Get(c => c.CarId == carId);
+            return new SuccessDataResult<CarImage>(result);
+        }
+
         public IResult Transaction(CarImage carImage)
         {
             throw new NotImplementedException();

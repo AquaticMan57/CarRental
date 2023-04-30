@@ -156,9 +156,6 @@ namespace DataAccess.Concrete.EfMemory
                 return result.ToList();
             }
         }
-        public 
-        
-        
     }
 
 

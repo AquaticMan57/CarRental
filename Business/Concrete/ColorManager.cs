@@ -56,10 +56,8 @@ namespace Business.Concrete
 
         public IDataResult<List<Colors>> GetAll()
         {
-            if (DateTime.Now.Hour == 18)
-            {
-                return new ErrorDataResult<List<Colors>>(Messages.MaintenanceTime);
-            }
+            
+            
             return new SuccessDataResult<List<Colors>>(_colordal.GetAll(),Messages.Succeed);
         }
         [SecuredOperation("list,admin")]

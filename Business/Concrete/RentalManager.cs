@@ -25,16 +25,13 @@ namespace Business.Concrete
             _rentalDal= rentalDal;
         }
 
-        [CacheRemoveAspect("IRentalService.Get")]
-        [SecuredOperation("add,admin")]
-        [ValidationAspect(typeof(RentalValidator))]
+        //[CacheRemoveAspect("IRentalService.Get")]
+        //[SecuredOperation("add,admin")]
+        //[ValidationAspect(typeof(RentalValidator))]
 
         public IResult Add(Rental rental)
         {
-            if (DateTime.Now.Hour == 18)
-            {
-                return new ErrorResult(Messages.MaintenanceTime);
-            }
+            
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.Succeed);
         }
