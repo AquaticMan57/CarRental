@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
             { 
                 return Ok(result); 
             }; 
-            return BadRequest(result); 
+            return BadRequest(result.Message); 
         }
         [HttpGet("getbybrandid")]
         public IActionResult GetCarsByBrandId(int id)
@@ -95,21 +95,28 @@ namespace WebAPI.Controllers
         {
             var result = _carService.Add(car);
             if (result.Success) { return Ok(result); }
-            return BadRequest(result);
+            return BadRequest(result.Message);
         }
         [HttpPost("delete")]
         public IActionResult Delete(Car car)
         {
             var result = _carService.Delete(car);
             if (result.Success) { return Ok(result); }
-            return BadRequest(result);
+            return BadRequest(result.Message);
         }
         [HttpPost("update")]
         public IActionResult Update(Car car)
         {
             var result = _carService.Update(car);
             if (result.Success) { return Ok(result); }
-            return BadRequest(result);
+            return BadRequest(result.Message);
+        }
+        [HttpGet("getcarbyid")]
+        public IActionResult GetCarById(int id)
+        {
+            var result = _carService.GetCarByCarId(id);
+            if (result.Success) { return Ok(result); };
+            return BadRequest(result.Message);
         }
     }
 }

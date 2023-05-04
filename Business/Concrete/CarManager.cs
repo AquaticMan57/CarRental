@@ -52,18 +52,18 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Succeed);
         }
 
-        [SecuredOperation("delete,admin")]
-        [CacheRemoveAspect("ICarService.Get")]
-        [ValidationAspect(typeof(CarValidator))]
+        //[SecuredOperation("delete,admin")]
+        //[CacheRemoveAspect("ICarService.Get")]
+        //[ValidationAspect(typeof(CarValidator))]
         [PerformanceAspect(10)]
 
         public IResult Delete(Car car)
         {
-            var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
-            if (result != null)
-            {
-                return new ErrorResult(result.Message);
-            }
+            //var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
+            //if (result != null)
+            //{
+            //    return new ErrorResult(result.Message);
+            //}
             if (car.Description.Length <= 2)
              {
                  return new ErrorResult(Messages.InvalidNameError);
@@ -127,17 +127,17 @@ namespace Business.Concrete
 
         
 
-        [SecuredOperation("update,admin")]
-        [CacheRemoveAspect("ICarService.Get")]
+        //[SecuredOperation("update,admin")]
+        //[CacheRemoveAspect("ICarService.Get")]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
-            var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
-            if (result != null)
-            {
-                return new ErrorResult(result.Message);
-            }
+            //var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
+            //if (result != null)
+            //{
+            //    return new ErrorResult(result.Message);
+            //}
             if (car.Description.Length<=2)
             {
                 return new ErrorResult(Messages.InvalidNameError);
@@ -186,6 +186,9 @@ namespace Business.Concrete
             return new ErrorResult(Messages.NameAlreadyExists);
         }
 
-       
+        public IDataResult<Car> GetCarByCarId(int carId)
+        {
+            return new SuccessDataResult<Car>(_carDal.Get(c=>c.Id == carId),Messages.Succeed);
+        }
     }
 }
