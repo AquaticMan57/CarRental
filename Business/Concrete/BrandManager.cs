@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Business.BusinessAspect;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
@@ -25,8 +25,8 @@ namespace Business.Concrete
         {
             _brandDal = brandDal;
         }
-        [SecuredOperation("add,admin")]
-        [CacheRemoveAspect("IBrandService.Get")]
+        //[SecuredOperation("add,admin")]
+        //[CacheRemoveAspect("IBrandService.Get")]
         [ValidationAspect(typeof(BrandValidator))]
         [PerformanceAspect(10)]
 
@@ -44,7 +44,7 @@ namespace Business.Concrete
             _brandDal.Add(brand);
             return new SuccessResult(Messages.Succeed);
         }
-        [SecuredOperation("delete,admin")]
+        //[SecuredOperation("delete,admin")]
         [CacheRemoveAspect("IBrandService.Get")]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(BrandValidator))]
@@ -71,6 +71,7 @@ namespace Business.Concrete
             
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(),Messages.Succeed);
         }
+
         [SecuredOperation("list,admin")]
         [PerformanceAspect(10)]
         [CacheAspect]
@@ -90,7 +91,7 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-        [SecuredOperation("update,admin")]
+        //[SecuredOperation("update,admin")]
         [CacheRemoveAspect("IBrandService.Get")]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(BrandValidator))]
@@ -107,11 +108,11 @@ namespace Business.Concrete
         private IResult CheckIfBrandNameExists(string brandName)
         {
             var result = _brandDal.Get(b=>b.BrandName== brandName);
-            if (result == null)
+            if (result != null)
             {
                 return new ErrorResult(Messages.NameAlreadyExists);
             }
-            return null!;
+            return null;
         }
     }
 }

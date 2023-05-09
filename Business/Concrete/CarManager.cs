@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Business.Abstract;
-using Business.BusinessAspect;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
@@ -31,8 +31,8 @@ namespace Business.Concrete
         }
         //loglamak : yapilan operasyonda bir yerde kaydini tutmak
 
-        //[SecuredOperation("add,admin")]
-        //[CacheRemoveAspect("ICarService.Get")]
+        [SecuredOperation("add,admin")]
+        [CacheRemoveAspect("ICarService.Get")]
         [ValidationAspect(typeof(CarValidator))]
         [PerformanceAspect(10)]
 
@@ -72,7 +72,7 @@ namespace Business.Concrete
              return new SuccessResult(Messages.Succeed);
         }
 
-        [SecuredOperation("list,admin")]
+        //[SecuredOperation("list,admin")]
         [ValidationAspect(typeof(CarValidator))]
         [CacheAspect]
         [PerformanceAspect(10)]
@@ -117,7 +117,7 @@ namespace Business.Concrete
 
         //[SecuredOperation("list,admin")]
         [ValidationAspect(typeof(CarValidator))]
-        //[CacheAspect]
+        [CacheAspect]
         [PerformanceAspect(10)]
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
@@ -127,17 +127,17 @@ namespace Business.Concrete
 
         
 
-        //[SecuredOperation("update,admin")]
+        [SecuredOperation("update")]
         //[CacheRemoveAspect("ICarService.Get")]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
-            //var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
-            //if (result != null)
-            //{
-            //    return new ErrorResult(result.Message);
-            //}
+            var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
+            if (result != null)
+            {
+                return new ErrorResult(result.Message);
+            }
             if (car.Description.Length<=2)
             {
                 return new ErrorResult(Messages.InvalidNameError);

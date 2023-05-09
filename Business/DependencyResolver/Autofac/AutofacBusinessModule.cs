@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Core.Utilities.Security.Jwt;
 using Microsoft.AspNetCore.Http;
 using DataAccess.Concrete.EfMemory;
+using Core.Utilities.Security.JWT;
 
 namespace Business.DependencyResolver.Autofac
 {
@@ -46,7 +47,7 @@ namespace Business.DependencyResolver.Autofac
             builder.RegisterType<FileHelperManager>().As<IFileHelper>().SingleInstance();
 
 
-            builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
+            builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance().SingleInstance();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>().SingleInstance();      
            
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();

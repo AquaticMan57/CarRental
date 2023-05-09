@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Business.BusinessAspect;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
@@ -27,8 +27,6 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(UserValidator))]
-        [CacheRemoveAspect("IUserService.Get")]
-        [SecuredOperation("add,admin")]
         public IResult Add(User user)
         {
             _userDal.Add(user);
@@ -60,26 +58,22 @@ namespace Business.Concrete
             var result = _userDal.GetUserByCarId(carId);
             return new SuccessDataResult<List<UserDetailDto>>(result);
         }
-        [CacheAspect]
-        [SecuredOperation("list,admin")]
+
         public IDataResult<User> GetByMail(string mail)
         {
             return new SuccessDataResult<User>(_userDal.Get(u=>u.Email == mail),Messages.Succeed);
         }
 
         
-        [CacheAspect]
-        [SecuredOperation("list,admin")]
+        
         public IDataResult<List<OperationClaim>> GetOperationClaims(User user)
         {
-            var operationResult = _userDal.GetOperationClaims(user);
+            var operationResult = _userDal?.GetClaims(user);
             return new SuccessDataResult<List<OperationClaim>>(operationResult, OperationClaimsMessage.OperationClaimsListed);
         }
 
         
 
-        [CacheAspect]
-        [SecuredOperation("list,admin")]
         public IDataResult<User> GetUserById(int id)
         {
             if (DateTime.Now.Hour == 18)

@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Business.BusinessAspect;
+using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
 using Castle.Core.Internal;

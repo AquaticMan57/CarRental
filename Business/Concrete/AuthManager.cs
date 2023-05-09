@@ -34,9 +34,9 @@ namespace Business.Concrete
                 return new ErrorDataResult<User>(UserMessages.UserNotFound);
             }
 
-            if (HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt))
+            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt))
             {
-                return new ErrorDataResult<User>(userToCheck.Data,UserMessages.PasswordError);
+                return new ErrorDataResult<User>(userToCheck.Data, UserMessages.PasswordError);
             }
             return new SuccessDataResult<User>(userToCheck.Data, Messages.Succeed);
 
@@ -57,7 +57,7 @@ namespace Business.Concrete
                 Status = true
             };
             _userService.Add(user); // user vaalidator 
-            return new SuccessDataResult<AccessToken>(_tokenHelper.CreateAccessToken
+            return new SuccessDataResult<AccessToken>(_tokenHelper.CreateToken
                 (user,_userService.GetOperationClaims(user).Data),UserMessages.UserRegistered);
 
         }
@@ -73,7 +73,7 @@ namespace Business.Concrete
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
             var claims = _userService.GetOperationClaims(user);
-            var accessToken = _tokenHelper.CreateAccessToken(user, claims.Data);
+            var accessToken = _tokenHelper.CreateToken(user, claims.Data);
             return new SuccessDataResult<AccessToken>(accessToken, AccessTokenMessages.TokenCreated);
 
         }

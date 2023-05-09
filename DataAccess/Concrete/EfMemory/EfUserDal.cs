@@ -14,21 +14,17 @@ namespace DataAccess.Concrete.EfMemory
 {
     public class EfUserDal : EfEntityRepositoryBase<User, NorthwindContext>, IUserDal
     {
-        public List<OperationClaim> GetOperationClaims(User user)
+        public List<OperationClaim> GetClaims(User user)
         {
             using (var context = new NorthwindContext())
             {
                 var result = from operationClaim in context.OperationClaims
                              join userOperationClaim in context.UserOperationClaims
-                             on user.Id equals userOperationClaim.Id
-                             where operationClaim.Id == userOperationClaim.OperationClaimId
-                             select new OperationClaim
-                             {
-                                 Id = operationClaim.Id,
-                                 Name = operationClaim.Name
-
-                             };
+                                 on operationClaim.Id equals userOperationClaim.OperationClaimId
+                             where userOperationClaim.UserId == user.Id
+                             select new OperationClaim { Id = operationClaim.Id, Name = operationClaim.Name };
                 return result.ToList();
+
             }
         }
         public List<UserDetailDto> GetUserByCarId(int carId)
