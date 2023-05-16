@@ -1,5 +1,6 @@
 ﻿using Core.DataAccess.EntityFramework;
 using Core.Entities.Concrete;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTO_s;
@@ -46,11 +47,70 @@ namespace DataAccess.Concrete.EfMemory
                                  Email = u.Email,
                                  UserId = u.Id,
                                  UserName = u.FirstName +" "+ u.LastName,
+                                 Status = u.Status,
 
                              };
                 return result.ToList();
 
             }
         }
+
+        public List<UserDetailDto> GetUserDtoByUserId(int userId)
+        {
+            using (var context = new NorthwindContext())
+            {
+                var result = from u in context.Users
+                             join cu in context.Customers
+                             on u.Id equals cu.UserId
+                             join r in context.Rentals
+                             on cu.CustomerId equals r.CustomerId
+                             join c in context.Cars
+                             on r.CarId equals c.Id
+                             where u.Id == userId
+                             select new UserDetailDto
+                             {
+                                 CarId = c.Id,
+                                 CustomerId = r.CustomerId,
+                                 Email = u.Email,
+                                 UserId = u.Id,
+                                 UserName = u.FirstName + " " + u.LastName,
+                                 Status = u.Status,
+                                 CompanyName = cu.CompanyName
+
+                             };
+                return result.ToList();
+            }
+        }
+
+        public List<UserDetailDto> GetUserDtos()
+        {
+            using (var context = new NorthwindContext())
+            {
+                var result = from u in context.Users
+                             join cu in context.Customers
+                             on u.Id equals cu.UserId
+                             join r in context.Rentals
+                             on cu.CustomerId equals r.CustomerId
+                             join c in context.Cars
+                             on r.CarId equals c.Id
+                             select new UserDetailDto
+                             {
+                                 CarId = c.Id,
+                                 CustomerId = r.CustomerId,
+                                 Email = u.Email,
+                                 UserId = u.Id,
+                                 UserName = u.FirstName + " " + u.LastName,
+                                 Status = u.Status,
+                                 CompanyName = cu.CompanyName
+                                 
+            
+                             };
+                return result.ToList();
+            }
+
+            
+        }
+
+        
     }
 }

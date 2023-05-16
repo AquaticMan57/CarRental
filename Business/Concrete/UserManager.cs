@@ -43,11 +43,11 @@ namespace Business.Concrete
         }
 
         
-        [CacheAspect]
-        [SecuredOperation("list,admin")]
+        //[CacheAspect]
+        //[SecuredOperation("list,admin")]
         public IDataResult<List<User>> GetAll()
         {
-            if (DateTime.Now.Hour == 18)
+            if (DateTime.Now.Hour == 05)
             {
                 return new ErrorDataResult<List<User>>(Messages.MaintenanceTime);
             }
@@ -74,13 +74,13 @@ namespace Business.Concrete
 
         
 
-        public IDataResult<User> GetUserById(int id)
+        public IDataResult<List<User>> GetUserById(int id)
         {
-            if (DateTime.Now.Hour == 18)
+            if (DateTime.Now.Hour == 05)
             {
-                return new ErrorDataResult<User>(Messages.MaintenanceTime);
+                return new ErrorDataResult<List<User>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<User>(_userDal.Get(c => c.Id == id), Messages.Succeed);
+            return new SuccessDataResult<List<User>>(_userDal.GetAll(c => c.Id == id), Messages.Succeed);
         }
 
         public IResult Transaction(User user)
@@ -97,6 +97,34 @@ namespace Business.Concrete
             return new SuccessResult(UserMessages.UserUpdated);
         }
 
-        
+        public IDataResult<User> GetUserByUserName(string userName)
+        {
+            var result = _userDal.Get(u => u.LastName + " " + u.FirstName == userName)!;
+            if (result != null)
+            {
+                return new SuccessDataResult<User>(result);
+            }
+            return new ErrorDataResult<User>(Messages.InvalidNameError);
+        }
+
+        public IDataResult<List<UserDetailDto>> GetUserDetailsByUserId(int userId)
+        {
+            var result = _userDal.GetUserDtoByUserId(userId);
+            if (result != null)
+            {
+                return new SuccessDataResult<List<UserDetailDto>>(result);
+            }
+            return new ErrorDataResult<List<UserDetailDto>>(UserMessages.UserNotFound);
+        }
+
+        public IDataResult<List<UserDetailDto>> GetAllUserDetails()
+        {
+            var result = _userDal.GetUserDtos();
+            if (result != null)
+            {
+                return new SuccessDataResult<List<UserDetailDto>>(result);
+            }
+            return new ErrorDataResult<List<UserDetailDto>>(UserMessages.NotAvailable);
+        }
     }
 }

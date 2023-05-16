@@ -10,6 +10,7 @@ namespace Core.Utilities.Security.Jwt
     {
         public string Token { get; set; }
         public DateTime Expiration { get; set; }
+        public string User { get; set; }
 
     }
 }

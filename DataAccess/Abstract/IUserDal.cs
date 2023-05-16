@@ -14,5 +14,7 @@ namespace DataAccess.Abstract
     {
         List<OperationClaim> GetClaims(User user);
         List<UserDetailDto> GetUserByCarId(int carId);
+        List<UserDetailDto> GetUserDtoByUserId(int userId);
+        List<UserDetailDto> GetUserDtos();
     }
 }

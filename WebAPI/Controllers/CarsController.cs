@@ -118,5 +118,12 @@ namespace WebAPI.Controllers
             if (result.Success) { return Ok(result); };
             return BadRequest(result.Message);
         }
+        [HttpPost("deletebyid")]
+        public IActionResult DeleteById(int id)
+        {
+            var result = _carService.DeleteById(id);
+            if (result.Success) { return Ok(result); };
+            return BadRequest(result.Message);
+        }
     }
 }

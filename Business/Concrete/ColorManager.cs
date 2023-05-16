@@ -11,6 +11,7 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,20 +36,32 @@ namespace Business.Concrete
             _colordal.Add(colors);
             return new SuccessResult(Messages.Succeed);
         }
-        [SecuredOperation("delete,admin")]
-        [CacheRemoveAspect("IColorsService.Get")]
+        //[SecuredOperation("delete,admin")]
+        //[CacheRemoveAspect("IColorsService.Get")]
         [ValidationAspect(typeof(ColorsValidator))]
         [PerformanceAspect(10)]
 
 
         public IResult Delete(Colors colors)
         {
-            if (DateTime.Now.Hour == 18)
+            if (DateTime.Now.Hour == 05)
             {
                 return new ErrorResult(Messages.MaintenanceTime);
             }
             return new SuccessResult(Messages.Succeed);
         }
+
+        public IResult DeleteById(int id)
+        {
+            Colors result = _colordal.Get(c => c.ColorId == id);
+            if (result == null)
+            {
+                return new ErrorResult(ColorMessages.InvalidId);
+            }
+            _colordal.Delete(result);
+            return new SuccessResult(Messages.Succeed);
+        }
+
         //[SecuredOperation("list,admin")]
         //[CacheAspect]
         [PerformanceAspect(10)]
@@ -67,7 +80,7 @@ namespace Business.Concrete
 
         public IDataResult<Colors> GetColorById(int id)
         {
-            if (DateTime.Now.Hour == 18)
+            if (DateTime.Now.Hour == 05)
             {
                 return new ErrorDataResult<Colors>(Messages.MaintenanceTime);
             }
@@ -80,14 +93,14 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(ColorsValidator))]
-        [SecuredOperation("update,admin")]
-        [CacheRemoveAspect("IColorsService.Get")]
+        //[SecuredOperation("update,admin")]
+        //[CacheRemoveAspect("IColorsService.Get")]
         [PerformanceAspect(10)]
 
 
         public IResult Update(Colors colors)
         {
-            if (colors.ColorName.Length <3 && DateTime.Now.Hour == 18)
+            if (colors.ColorName.Length <3 && DateTime.Now.Hour == 05)
             {
                 return new ErrorResult(Messages.MaintenanceTime + Messages.InvalidNameError);
             }

@@ -27,10 +27,18 @@ namespace Business.Concrete
 
         //[CacheRemoveAspect("IRentalService.Get")]
         //[SecuredOperation("add,admin")]
-        //[ValidationAspect(typeof(RentalValidator))]
+        [ValidationAspect(typeof(RentalValidator))]
 
         public IResult Add(Rental rental)
         {
+            if (rental.RentDate == null)
+            {
+                rental.RentDate = DateTime.Now;
+            }
+            if (rental.ReturnDate == null)
+            {
+                rental.ReturnDate = DateTime.Now.AddMonths(2);
+            }
             
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.Succeed);
@@ -48,7 +56,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Succeed);
         }
 
-        [CacheAspect]
+        //[CacheAspect]
         //[SecuredOperation("list,admin")]
         public IDataResult<List<Rental>> GetAll()
         {

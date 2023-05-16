@@ -19,7 +19,12 @@ namespace Business.Constants.Messages
     public class CarMessages : Messages
     {
         public static string CarsListed = "Araclar listelendi";
-        
+
+        public static string CarDeleted = "Arac Silindi";
+    }
+    public class ColorMessages : Messages
+    {
+        public static string InvalidId = "Renk Bulunamadi";
     }
     public class CarImagesMessage : Messages
     {

@@ -15,12 +15,15 @@ namespace Business.Abstract
         IResult Delete(User user);
         IResult Update(User user);
         IResult Add(User user);
-        IDataResult<User> GetUserById(int id);
+        IDataResult<List<User>> GetUserById(int id);
         IDataResult<List<User>> GetAll();
         IDataResult<List<OperationClaim>> GetOperationClaims(User user);
         IDataResult<User> GetByMail(string mail);
         IResult Transaction(User user);
         IDataResult<List<UserDetailDto>> GetUserByCarId(int carId);
+        IDataResult<User> GetUserByUserName(string userName);
+        IDataResult<List<UserDetailDto>> GetUserDetailsByUserId(int userId);
+        IDataResult<List<UserDetailDto>> GetAllUserDetails();
 
     }
 }

@@ -31,8 +31,8 @@ namespace Business.Concrete
         }
         //loglamak : yapilan operasyonda bir yerde kaydini tutmak
 
-        [SecuredOperation("add,admin")]
-        [CacheRemoveAspect("ICarService.Get")]
+        //[SecuredOperation("add,admin")]
+        //[CacheRemoveAspect("ICarService.Get")]
         [ValidationAspect(typeof(CarValidator))]
         [PerformanceAspect(10)]
 
@@ -189,6 +189,17 @@ namespace Business.Concrete
         public IDataResult<Car> GetCarByCarId(int carId)
         {
             return new SuccessDataResult<Car>(_carDal.Get(c=>c.Id == carId),Messages.Succeed);
+        }
+
+        public IResult DeleteById(int carId)
+        {
+            var carToDelete = _carDal.Get(c=>c.Id == carId);
+            if (carToDelete == null)
+            {
+                return new ErrorResult(Messages.NotAvailable);
+            }
+            _carDal.Delete(carToDelete);
+            return new SuccessResult(CarMessages.CarDeleted);
         }
     }
 }

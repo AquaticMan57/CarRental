@@ -36,8 +36,7 @@ namespace Core.DataAccess.EntityFramework
                 //context.Cars.Remove(context.Cars.SingleOrDefault(c=>c.Id == entity.Id));
                 context.SaveChanges();
             }
-        }
-                                                                                                                                            
+        }                                                                                                                               
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
         {
             using (TContext context = new TContext())

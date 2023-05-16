@@ -18,7 +18,7 @@ namespace Entities.DTO_s
         public string ColorName { get; set; }
         public string Description { get; set; }
         public string UserName { get; set; }
-        public DateTime RentDate { get; set; }
+        public DateTime? RentDate { get; set; }
         public DateTime? ReturnDate { get; set; }
     }
 }

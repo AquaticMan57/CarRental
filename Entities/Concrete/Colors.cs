@@ -12,6 +12,6 @@ namespace Entities.Concrete
     public class Colors : IEntity
     {
         [System.ComponentModel.DataAnnotations.Key] public int ColorId { get; set; }
-        public string? ColorName { get; set; }
+        public string ColorName { get; set; }
     }
 }
