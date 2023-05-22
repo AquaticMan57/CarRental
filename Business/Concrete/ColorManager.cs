@@ -29,7 +29,8 @@ namespace Business.Concrete
         //[ValidationAspect(typeof(ColorsValidator))]
         //[PerformanceAspect(10)]
 
-
+        [ValidationAspect(typeof(ColorsValidator))]
+        [PerformanceAspect(10)]
         public IResult Add(Colors colors)
         {
             

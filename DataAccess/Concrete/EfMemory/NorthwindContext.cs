@@ -24,5 +24,6 @@ namespace DataAccess.Concrete.EfMemory
         public DbSet<CarImage> CarImages { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
+        public DbSet<Payment> Payment { get; set; }
     }
 }

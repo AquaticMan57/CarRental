@@ -74,13 +74,13 @@ namespace Business.Concrete
 
         
 
-        public IDataResult<List<User>> GetUserById(int id)
+        public IDataResult<User> GetUserById(int id)
         {
             if (DateTime.Now.Hour == 05)
             {
-                return new ErrorDataResult<List<User>>(Messages.MaintenanceTime);
+                return new ErrorDataResult<User>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(c => c.Id == id), Messages.Succeed);
+            return new SuccessDataResult<User>(_userDal.Get(c => c.Id == id), Messages.Succeed);
         }
 
         public IResult Transaction(User user)

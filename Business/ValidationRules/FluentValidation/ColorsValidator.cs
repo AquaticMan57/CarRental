@@ -11,6 +11,10 @@ namespace Business.ValidationRules.FluentValidation
 {
     public class ColorsValidator : AbstractValidator<Colors>
     {
-
+        public ColorsValidator()
+        {
+            RuleFor(c=>c.ColorName).MinimumLength(3);
+           
+        }
     }
 }

@@ -14,7 +14,8 @@ namespace Business.Constants.Messages
         public static string MaintenanceTime = "Sunucumuz su anda bakimda";
         public static string NotAvailable = "Urun musait degil (kullanilamaz)";
         public static string NameAlreadyExists = "Urun ismi zaten kullaniliyor";
-        
+        public static string Listed = "Listelendi!";
+        public static string Error = "Hata!";
     }
     public class CarMessages : Messages
     {

@@ -1,8 +1,10 @@
 ﻿using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
+using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Performances;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -21,26 +23,23 @@ namespace Business.Concrete
         {
             _customerDal= customerDal;
         }
-        [CacheRemoveAspect("ICarService.Get")]
+        //[CacheRemoveAspect("ICarService.Get")]
         [PerformanceAspect(10)]
-        [SecuredOperation("add,admin")]
-
+        //[SecuredOperation("add,admin")]
+        [ValidationAspect(typeof(CustomerValidator))]
         public IResult Add(Customer customer)
         {
-            if (customer.CompanyName.Length < 3)
-            {
-                return new ErrorResult(Messages.InvalidNameError);
-            }
+            
             _customerDal.Add(customer);
             return new SuccessResult(Messages.Succeed);
         }
-        [CacheRemoveAspect("ICarService.Get")]
+        //[CacheRemoveAspect("ICarService.Get")]
         [PerformanceAspect(10)]
-        [SecuredOperation("delete,admin")]
+        //[SecuredOperation("delete,admin")]
 
         public IResult Delete(Customer customer)
         {
-            if (DateTime.Now.Hour == 18)
+            if (DateTime.Now.Hour == 05)
             {
                 return new ErrorResult(Messages.MaintenanceTime);
             }
@@ -53,7 +52,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Customer>> GetAll()
         {
-            if (DateTime.Now.Hour == 18)
+            if (DateTime.Now.Hour == 05)
             {
                 return new ErrorDataResult<List<Customer>>(Messages.MaintenanceTime);
             }
@@ -61,15 +60,20 @@ namespace Business.Concrete
         }
 
         [PerformanceAspect(10)]
-        [SecuredOperation("list,admin")]
-        [CacheAspect]
+        //[SecuredOperation("list,admin")]
+        //[CacheAspect]
         public IDataResult<Customer> GetCustomerById(int customerId)
         {
-            if (DateTime.Now.Hour == 18)
+            if (DateTime.Now.Hour == 05)
             {
                 return new ErrorDataResult<Customer>(Messages.MaintenanceTime);
             }
             return new SuccessDataResult<Customer>(_customerDal.Get(c=>c.CustomerId== customerId),Messages.Succeed);
+        }
+        [PerformanceAspect(10)]
+        public IDataResult<List<Customer>> GetCustomersByUserId(int userId)
+        {
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(c => c.UserId == userId), Messages.Succeed);
         }
 
         public IResult Transaction(Customer customer)
@@ -77,13 +81,13 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-        [SecuredOperation("update,admin")]
+        //[SecuredOperation("update,admin")]
         [PerformanceAspect(10)]
-        [CacheRemoveAspect("ICarService.Get")]
+        //[CacheRemoveAspect("ICarService.Get")]
 
         public IResult Update(Customer customer)
         {
-            if (DateTime.Now.Hour == 18)
+            if (DateTime.Now.Hour == 05)
             {
                 return new ErrorResult(Messages.MaintenanceTime);
             }

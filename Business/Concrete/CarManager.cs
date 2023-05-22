@@ -41,7 +41,7 @@ namespace Business.Concrete
             //var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
             //if (result != null)
             //{
-            //    return new ErrorResult(result.Message);
+            //   return new ErrorResult(result.Message);
             //}
             if (DateTime.Now.Hour ==05)
             {
@@ -54,7 +54,6 @@ namespace Business.Concrete
 
         //[SecuredOperation("delete,admin")]
         //[CacheRemoveAspect("ICarService.Get")]
-        //[ValidationAspect(typeof(CarValidator))]
         [PerformanceAspect(10)]
 
         public IResult Delete(Car car)
@@ -74,7 +73,7 @@ namespace Business.Concrete
 
         //[SecuredOperation("list,admin")]
         [ValidationAspect(typeof(CarValidator))]
-        [CacheAspect]
+        //[CacheAspect]
         [PerformanceAspect(10)]
 
         public IDataResult<List<Car>> GetCarByDailyPrice(decimal min, decimal max)
@@ -127,17 +126,17 @@ namespace Business.Concrete
 
         
 
-        [SecuredOperation("update")]
+        //[SecuredOperation("update")]
         //[CacheRemoveAspect("ICarService.Get")]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
-            var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
-            if (result != null)
-            {
-                return new ErrorResult(result.Message);
-            }
+            //var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
+            //if (result != null)
+            //{
+            //    return new ErrorResult(result.Message);
+            //}
             if (car.Description.Length<=2)
             {
                 return new ErrorResult(Messages.InvalidNameError);
