@@ -55,6 +55,35 @@ namespace DataAccess.Concrete.EfMemory
             }
         }
 
+        public List<UserDetailDto> GetUserDtoByCustomerId(int customerId)
+        {
+            using (var context = new NorthwindContext())
+            {
+                var result = from u in context.Users
+                             join cu in context.Customers
+                             on u.Id equals cu.UserId
+                             join r in context.Rentals
+                             on cu.CustomerId equals r.CustomerId
+                             join c in context.Cars
+                             on r.CarId equals c.Id
+                             where cu.CustomerId == customerId
+                             && r.CustomerId == customerId
+                             select new UserDetailDto
+                             {
+                                 CarId = customerId,
+                                 CustomerId = r.CustomerId,
+                                 Email = u.Email,
+                                 UserId = u.Id,
+                                 CompanyMail = cu.CompanyMail,
+                                 CompanyName = cu.CompanyName,
+                                 Status = u.Status,
+                                 UserName = u.FirstName + " " + u.LastName,
+
+                             };
+                return result.ToList();
+            }
+        }
+
         public List<UserDetailDto> GetUserDtoByUserId(int userId)
         {
             using (var context = new NorthwindContext())
@@ -75,7 +104,8 @@ namespace DataAccess.Concrete.EfMemory
                                  UserId = u.Id,
                                  UserName = u.FirstName + " " + u.LastName,
                                  Status = u.Status,
-                                 CompanyName = cu.CompanyName
+                                 CompanyName = cu.CompanyName,
+                                 CompanyMail = cu.CompanyMail,
 
                              };
                 return result.ToList();

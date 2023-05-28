@@ -101,10 +101,19 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(carImages, Messages.Succeed);
         }
 
-        public IDataResult<CarImage> GetImageByCarId(int carId)
+        
+
+        public IDataResult<List<CarImage>> GetImagesByCarId(int carId)
         {
-            var result = _carImageDal.Get(c => c.CarId == carId);
-            return new SuccessDataResult<CarImage>(result);
+            
+            List<CarImage> result = _carImageDal.GetAll(c => c.CarId == carId);
+            if (result != null)
+            {
+                return new SuccessDataResult<List<CarImage>>(result, Messages.Succeed); ;
+            }
+            return new ErrorDataResult<List<CarImage>>(Messages.Error);
+            
+
         }
 
         public IResult Transaction(CarImage carImage)

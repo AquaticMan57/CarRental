@@ -126,5 +126,15 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<List<UserDetailDto>>(UserMessages.NotAvailable);
         }
+
+        public IDataResult<List<UserDetailDto>> GetUserDetailsByCustomerId(int customerId)
+        {
+            var result = _userDal.GetUserDtoByCustomerId(customerId);
+            if (result != null)
+            {
+                return new SuccessDataResult<List<UserDetailDto>>(result);
+            }
+            return new ErrorDataResult<List<UserDetailDto>>();
+        }
     }
 }

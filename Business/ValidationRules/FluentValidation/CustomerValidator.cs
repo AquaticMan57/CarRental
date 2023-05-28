@@ -13,6 +13,7 @@ namespace Business.ValidationRules.FluentValidation
         public CustomerValidator()
         {
             RuleFor(c=>c.CompanyName).MinimumLength(3);
+            RuleFor(c => c.CompanyMail).EmailAddress();
         }
     }
 }

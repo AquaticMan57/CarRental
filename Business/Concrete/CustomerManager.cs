@@ -2,12 +2,15 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants.Messages;
 using Business.ValidationRules.FluentValidation;
+using Castle.Core.Internal;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Performances;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.BusinessRules;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +32,14 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CustomerValidator))]
         public IResult Add(Customer customer)
         {
-            
+            IResult result =  BusinessRules.Run(
+                CheckIfCompanyExists(customer.UserId)
+                );
+
+            if (result != null)
+            {
+                return result;
+            }
             _customerDal.Add(customer);
             return new SuccessResult(Messages.Succeed);
         }
@@ -39,13 +49,22 @@ namespace Business.Concrete
 
         public IResult Delete(Customer customer)
         {
-            if (DateTime.Now.Hour == 05)
-            {
-                return new ErrorResult(Messages.MaintenanceTime);
-            }
+            
             _customerDal.Delete(customer);
             return new SuccessResult(Messages.Succeed);
         }
+
+        public IResult DeleteById(int id)
+        {
+            Customer customerToDelete = _customerDal.Get(c=>c.CustomerId== id);
+            if (customerToDelete != null)
+            {
+                _customerDal.Delete(customerToDelete);
+                return new SuccessResult(Messages.Succeed);
+            }
+            return new ErrorResult(CustomerMessages.CustomerNotFound);
+        }
+
         [PerformanceAspect(10)]
         //[CacheAspect]
         //[SecuredOperation("list,admin")]
@@ -71,28 +90,55 @@ namespace Business.Concrete
             return new SuccessDataResult<Customer>(_customerDal.Get(c=>c.CustomerId== customerId),Messages.Succeed);
         }
         [PerformanceAspect(10)]
-        public IDataResult<List<Customer>> GetCustomersByUserId(int userId)
+        public IDataResult<Customer> GetCustomerByUserId(int userId)
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(c => c.UserId == userId), Messages.Succeed);
+            return new SuccessDataResult<Customer>(_customerDal.Get(c => c.UserId == userId), Messages.Succeed);
+        }
+
+        
+
+        //[SecuredOperation("update,admin")]
+        [PerformanceAspect(10)]
+        //[CacheRemoveAspect("ICarService.Get")]
+        [ValidationAspect(typeof(CustomerValidator))]
+        public IResult Update(Customer customer)
+        {
+            
+            _customerDal.Update(customer);
+            return new SuccessResult(Messages.Succeed);
         }
 
         public IResult Transaction(Customer customer)
         {
             throw new NotImplementedException();
         }
-
-        //[SecuredOperation("update,admin")]
-        [PerformanceAspect(10)]
-        //[CacheRemoveAspect("ICarService.Get")]
-
-        public IResult Update(Customer customer)
+        private IResult CheckIfCompanyNameExists(string companyName)
         {
-            if (DateTime.Now.Hour == 05)
+            var text = _customerDal.GetAll(c => c.CompanyName == companyName).Any();
+            if (text)
             {
-                return new ErrorResult(Messages.MaintenanceTime);
+                return new ErrorResult(CustomerMessages.CompanyNameExists); 
             }
-            _customerDal.Update(customer);
-            return new SuccessResult(Messages.Succeed);
+            return new SuccessResult();
+        }
+        private IResult CheckIfCompanyMailExists(string mail)
+        {
+            var text = _customerDal.GetAll(c => c.CompanyMail == mail).Any();
+            if (text)
+            {
+                return new ErrorResult(CustomerMessages.CompanyMailExists);
+            }
+            return new SuccessResult();
+        }
+        private IResult CheckIfCompanyExists(int userId)
+        {
+            var text = _customerDal.GetAll(c=>c.UserId == userId).Any();
+            if (text)
+            {
+                return new ErrorResult(CustomerMessages.CompanyAlreadyExists);
+            }
+            return new SuccessResult();
+
         }
     }
 }

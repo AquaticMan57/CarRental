@@ -27,6 +27,13 @@ namespace Business.Constants.Messages
     {
         public static string InvalidId = "Renk Bulunamadi";
     }
+    public class CustomerMessages : Messages
+    {
+        public static string CompanyMailExists = "Mail adresi zaten mevcut!";
+        public static string CompanyNameExists = "Sirket ismi zaten mevcut";
+        public static string CompanyAlreadyExists = "Sirketiniz Zaten Var";
+        public static string CustomerNotFound = "Silinecek Musteri Bulunamadi";
+    }
     public class CarImagesMessage : Messages
     {
         public static string CarImagesLimitExceded = "Arac resminin sayi limitini doldurdunuz";

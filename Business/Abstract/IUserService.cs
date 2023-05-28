@@ -23,6 +23,7 @@ namespace Business.Abstract
         IDataResult<List<UserDetailDto>> GetUserByCarId(int carId);
         IDataResult<User> GetUserByUserName(string userName);
         IDataResult<List<UserDetailDto>> GetUserDetailsByUserId(int userId);
+        IDataResult<List<UserDetailDto>> GetUserDetailsByCustomerId(int customerId);
         IDataResult<List<UserDetailDto>> GetAllUserDetails();
 
     }
