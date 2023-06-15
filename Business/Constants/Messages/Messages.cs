@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,12 +21,19 @@ namespace Business.Constants.Messages
     public class CarMessages : Messages
     {
         public static string CarsListed = "Araclar listelendi";
+        public static string CarNotFound = "Arac Bulunamadi";
 
         public static string CarDeleted = "Arac Silindi";
     }
     public class ColorMessages : Messages
     {
         public static string InvalidId = "Renk Bulunamadi";
+        public static string ColorExists = "Renk zaten mevcut!";
+    }
+    public class BrandMessages : Messages
+    {
+        public static string BrandNameExists = "Marka ismi zaten mevcut!";
+        public static string BrandNotExists = "Marka Bulunamiyor";
     }
     public class CustomerMessages : Messages
     {
@@ -70,6 +78,12 @@ namespace Business.Constants.Messages
         public static string NoDto = "Listelemede bir sey gozukmedi!!!";
 
 
+    }
+    public class PaymentMessages : Messages
+    {
+        public static string PayAdded = "Kredi Karti Eklendi!";
+        public static string PayNotFound = "Kredi Karti Bulunamadi";
+        public static string InvalidExDate = "Gecersiz Son Kullanma Tarihi";
     }
 
 }

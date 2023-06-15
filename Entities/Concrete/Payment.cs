@@ -15,5 +15,6 @@ namespace Entities.Concrete
         public string CardNumber { get; set; }
         public string Cvc { get; set; }
         public DateTime ExDate { get; set; }
+        public bool Status { get; set; }
     }
 }

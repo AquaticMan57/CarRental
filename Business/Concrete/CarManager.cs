@@ -38,11 +38,11 @@ namespace Business.Concrete
 
         public IResult Add(Car car)
         {
-            //var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
-            //if (result != null)
-            //{
-            //   return new ErrorResult(result.Message);
-            //}
+            IResult result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
+            if (result != null)
+            {
+               return new ErrorResult(result.Message);
+            }
             if (DateTime.Now.Hour ==05)
             {
                 return new ErrorResult(Messages.MaintenanceTime);
@@ -58,11 +58,11 @@ namespace Business.Concrete
 
         public IResult Delete(Car car)
         {
-            //var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
-            //if (result != null)
-            //{
-            //    return new ErrorResult(result.Message);
-            //}
+            IResult result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
+            if (result != null)
+            {
+                return new ErrorResult(result.Message);
+            }
             if (car.Description.Length <= 2)
              {
                  return new ErrorResult(Messages.InvalidNameError);
@@ -72,7 +72,6 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
-        [ValidationAspect(typeof(CarValidator))]
         //[CacheAspect]
         [PerformanceAspect(10)]
 
@@ -83,7 +82,6 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
-        [ValidationAspect(typeof(CarValidator))]
         //[CacheAspect]
         [PerformanceAspect(10)]
 
@@ -94,9 +92,8 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
-        //[ValidationAspect(typeof(CarValidator))]
         //[CacheAspect]
-        //[PerformanceAspect(10)]
+        [PerformanceAspect(10)]
 
         public IDataResult<List<Car>> GetAll()
         {
@@ -104,7 +101,6 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
-        [ValidationAspect(typeof(CarValidator))]
         //[CacheAspect]
         [PerformanceAspect(10)]
 
@@ -115,8 +111,6 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
-        [ValidationAspect(typeof(CarValidator))]
-        [CacheAspect]
         [PerformanceAspect(10)]
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
@@ -124,19 +118,17 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c=>c.ColorId == colorId),Messages.Succeed);
         }
 
-        
-
         //[SecuredOperation("update")]
         //[CacheRemoveAspect("ICarService.Get")]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
-            //var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
-            //if (result != null)
-            //{
-            //    return new ErrorResult(result.Message);
-            //}
+            var result = BusinessRules.Run(CheckIfCarNameExists(car.Description));
+            if (result != null)
+            {
+                return new ErrorResult(result.Message);
+            }
             if (car.Description.Length<=2)
             {
                 return new ErrorResult(Messages.InvalidNameError);
@@ -157,10 +149,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarsDetailBrandAndColorId(brandId, colorId),Messages.Succeed);
         }
-        public IDataResult<List<CarDetailDto>> GetCarDetailByCarId(int carId)
-        {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetailByCarId(carId),Messages.Succeed);
-        }
+        
         public IResult Transaction(Car car)
         {
 
@@ -178,15 +167,26 @@ namespace Business.Concrete
         {
             var text = _carDal.Get(c=>c.Description == description);
 
-            if (text == null)
+            if (text != null)
             {
-                return null;
+                return new ErrorResult(Messages.NameAlreadyExists);
             }
-            return new ErrorResult(Messages.NameAlreadyExists);
+            return new SuccessResult();
+        }
+        private IResult CheckIfCarExistsById(int carId)
+        {
+            var text = _carDal.Get(c => c.Id == carId);
+            if (text != null)
+            {
+                return new ErrorResult(CarMessages.CarNotFound);
+            }
+            return new SuccessResult();
+
         }
 
         public IDataResult<Car> GetCarByCarId(int carId)
         {
+            
             return new SuccessDataResult<Car>(_carDal.Get(c=>c.Id == carId),Messages.Succeed);
         }
 
@@ -199,6 +199,16 @@ namespace Business.Concrete
             }
             _carDal.Delete(carToDelete);
             return new SuccessResult(CarMessages.CarDeleted);
+        }
+
+        public IDataResult<List<CarDetailDto>> GetCarDetailById(int id)
+        {
+            var result = _carDal.GetCarDetailById(id);
+            if (result != null)
+            {
+                return new SuccessDataResult<List<CarDetailDto>>(result,CarMessages.Succeed);
+            }
+            return new ErrorDataResult<List<CarDetailDto>>(CarMessages.CarNotFound);
         }
     }
 }

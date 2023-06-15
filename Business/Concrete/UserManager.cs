@@ -6,6 +6,7 @@ using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
+using Core.Utilities.Security.Hashing;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTO_s;
@@ -34,8 +35,8 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(UserValidator))]
-        [CacheRemoveAspect("IUserService.Get")]
-        [SecuredOperation("delete,admin")]
+        //[CacheRemoveAspect("IUserService.Get")]
+        //[SecuredOperation("delete,admin")]
         public IResult Delete(User user)
         {
             _userDal.Delete(user);
@@ -89,10 +90,28 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(UserValidator))]
-        [CacheRemoveAspect("IUserService.Get")]
-        [SecuredOperation("update,admin")]
-        public IResult Update(User user)
+        //[CacheRemoveAspect("IUserService.Get")]
+        //[SecuredOperation("update,admin")]
+        public IResult Update(UserForUpdateDto userUpdateDto)
         {
+            
+            var userToCheck = GetUserById(userUpdateDto.Id);
+            var result = HashingHelper.VerifyPasswordHash(userUpdateDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt)!;
+            if (result == false)
+            {
+                return new ErrorResult(UserMessages.PasswordError);
+            }
+            User user = new User
+            {
+                Id = userUpdateDto.Id,
+                Email = userUpdateDto.Email,
+                FirstName = userUpdateDto.FirstName,
+                LastName = userUpdateDto.LastName,
+                PasswordHash = userToCheck.Data.PasswordHash,
+                PasswordSalt = userToCheck.Data.PasswordSalt,
+                Status = true
+            };
+
             _userDal.Update(user);
             return new SuccessResult(UserMessages.UserUpdated);
         }
@@ -136,5 +155,17 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<List<UserDetailDto>>();
         }
+
+        public IResult DeleteById(int id)
+        {
+            var result = _userDal.Get(u=>u.Id== id);
+            if (result == null)
+            {
+                return new ErrorResult(UserMessages.UserNotFound);
+            }
+            return new SuccessResult(UserMessages.UserDeleted);
+        }
+
+        
     }
 }

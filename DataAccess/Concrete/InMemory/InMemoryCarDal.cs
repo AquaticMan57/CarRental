@@ -76,6 +76,11 @@ namespace DataAccess.Concrete.InMemory
             throw new NotImplementedException();
         }
 
+        public List<CarDetailDto> GetCarDetailById(int carId)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Car> GetCars()
         {
             return _cars;
@@ -116,7 +121,7 @@ namespace DataAccess.Concrete.InMemory
 
         }
 
-        List<CarDetailDto> ICarDal.GetCarDetailByCarId(int carId)
+        List<CarDetailDto> ICarDal.GetCarDetailById(int carId)
         {
             throw new NotImplementedException();
         }

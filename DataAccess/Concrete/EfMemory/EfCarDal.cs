@@ -127,7 +127,7 @@ namespace DataAccess.Concrete.EfMemory
             }
         }
 
-        public List<CarDetailDto> GetCarDetailByCarId(int carId)
+        public List<CarDetailDto> GetCarDetailById(int carId)
         {
             using (var context = new NorthwindContext())
             {
@@ -136,9 +136,7 @@ namespace DataAccess.Concrete.EfMemory
                              on c.ColorId equals co.ColorId
                              join b in context.Brands
                              on c.BrandId equals b.BrandId
-                             join ci in context.CarImages
-                             on c.Id equals ci.CarId
-                             where c.Id == carId
+                             where c.Id == carId 
                              select new CarDetailDto
                              {
                                  CarId = c.Id,
@@ -149,7 +147,8 @@ namespace DataAccess.Concrete.EfMemory
                                  DailyPrice = c.DailyPrice,
                                  Description = c.Description,
                                  ModelYear = c.ModelYear,
-                                 ImagePath = ci.ImagePath,
+                                 ImagePath = (from ci in context.CarImages where c.Id == ci.CarId select ci.ImagePath).FirstOrDefault()!,
+                                 
 
 
                              };

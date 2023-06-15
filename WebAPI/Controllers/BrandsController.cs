@@ -51,9 +51,19 @@ namespace WebAPI.Controllers
             var result = _brandService.Delete(brand);
             if (result.Success)
             {
-                return BadRequest(result.Message);
+                return Ok(result);
             }
-            return Ok(result);
+            return BadRequest(result.Message);
+        }
+        [HttpGet("getbrandbyid")]
+        public IActionResult GetBrandById(int id)
+        {
+            var result = _brandService.GetBrandByBrandId(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
         }
     }
 }

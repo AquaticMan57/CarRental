@@ -32,8 +32,6 @@ namespace Core.DataAccess.EntityFramework
             {
                 var deletedEntity = context.Entry(entity);
                 deletedEntity.State = EntityState.Deleted;
-
-                //context.Cars.Remove(context.Cars.SingleOrDefault(c=>c.Id == entity.Id));
                 context.SaveChanges();
             }
         }                                                                                                                               

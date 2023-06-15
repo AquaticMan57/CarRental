@@ -74,5 +74,16 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);  
         }
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int id)
+        {
+            var card = _paymentService.GetPayById(id);
+            if (card.Success)
+            {
+                return Ok(card);
+
+            }
+            return BadRequest(card.Message);
+        }
     }
 }

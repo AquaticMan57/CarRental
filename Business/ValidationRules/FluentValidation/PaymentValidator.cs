@@ -13,13 +13,30 @@ namespace Business.ValidationRules.FluentValidation
         public PaymentValidator()
         {
             RuleFor(p => p.CardNumber).Must(Has16Keys);
-            RuleFor(p => p.CardNumber).CreditCard();
+            RuleFor(p=>p.ExDate).NotEmpty();
             RuleFor(p => p.Cvc).Length(3);
         }
         private bool Has16Keys(string arg)
         {
-            bool result = arg.Length == 16;
+            bool result;
+            if (arg.Length == 16)
+            {
+                result = true;
+            }
+            else
+            {
+                result = false;
+            }
             return result;
+        }
+        private bool LasterThanNowOrPast(DateTime date)
+        {
+            
+            if (date>DateTime.Now)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

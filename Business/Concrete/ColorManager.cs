@@ -5,6 +5,7 @@ using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Performances;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.BusinessRules;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -33,10 +34,26 @@ namespace Business.Concrete
         [PerformanceAspect(10)]
         public IResult Add(Colors colors)
         {
-            
+            IResult result = BusinessRules.Run(CheckIfColorNameExists(colors.ColorName));
+            if (result != null)
+            {
+                return new ErrorResult(result.Message);
+            }
             _colordal.Add(colors);
             return new SuccessResult(Messages.Succeed);
         }
+
+        private IResult CheckIfColorNameExists(string colorName)
+        {
+            var text = _colordal.Get(c=>c.ColorName == colorName);
+            if (text != null)
+            {
+                return new ErrorResult(ColorMessages.ColorExists);
+            }
+            return new SuccessResult();
+
+        }
+
         //[SecuredOperation("delete,admin")]
         //[CacheRemoveAspect("IColorsService.Get")]
         [ValidationAspect(typeof(ColorsValidator))]
@@ -98,12 +115,12 @@ namespace Business.Concrete
         //[CacheRemoveAspect("IColorsService.Get")]
         [PerformanceAspect(10)]
 
-
         public IResult Update(Colors colors)
         {
-            if (colors.ColorName.Length <3 && DateTime.Now.Hour == 05)
+            IResult result = BusinessRules.Run(CheckIfColorNameExists(colors.ColorName));
+            if (result != null)
             {
-                return new ErrorResult(Messages.MaintenanceTime + Messages.InvalidNameError);
+                return new ErrorResult(result.Message);
             }
             _colordal.Update(colors);
             return new SuccessResult( Messages.Succeed);

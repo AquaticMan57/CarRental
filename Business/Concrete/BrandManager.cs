@@ -45,7 +45,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Succeed);
         }
         //[SecuredOperation("delete,admin")]
-        [CacheRemoveAspect("IBrandService.Get")]
+        //[CacheRemoveAspect("IBrandService.Get")]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Delete(Brand brand)
@@ -58,6 +58,18 @@ namespace Business.Concrete
             _brandDal.Delete(brand);
             return new SuccessResult(Messages.Succeed);
         }
+        [PerformanceAspect(10)]
+        public IResult DeleteById(int id)
+        {
+            IResult result = BusinessRules.Run(CheckIfBrandExists(id));
+            if (result != null)
+            {
+                return new ErrorResult(result.Message);
+            }
+            return new SuccessResult(Messages.Succeed);
+
+        }
+
         //[SecuredOperation("list,admin")]
         //[CacheAspect]
         [PerformanceAspect(10)]
@@ -72,9 +84,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(),Messages.Succeed);
         }
 
-        [SecuredOperation("list,admin")]
+        //[SecuredOperation("list,admin")]
         [PerformanceAspect(10)]
-        [CacheAspect]
+        //[CacheAspect]
         [ValidationAspect(typeof(BrandValidator))]
         public IDataResult<Brand> GetBrandByBrandId(int brandId)
         {
@@ -86,18 +98,19 @@ namespace Business.Concrete
             return new SuccessDataResult<Brand>(_brandDal.Get(b=>b.BrandId ==brandId),Messages.Succeed);
         }
 
+
         public IResult Transaction(Brand brand)
         {
             throw new NotImplementedException();
         }
 
         //[SecuredOperation("update,admin")]
-        [CacheRemoveAspect("IBrandService.Get")]
+        //[CacheRemoveAspect("IBrandService.Get")]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Update(Brand brand)
         {
-            var result = BusinessRules.Run(CheckIfBrandNameExists(brand.BrandName));
+            IResult result = BusinessRules.Run(CheckIfBrandNameExists(brand.BrandName));
             if (result != null)
             {
                 return new ErrorResult(result.Message);
@@ -110,9 +123,18 @@ namespace Business.Concrete
             var result = _brandDal.Get(b=>b.BrandName== brandName);
             if (result != null)
             {
-                return new ErrorResult(Messages.NameAlreadyExists);
+                return new ErrorResult(BrandMessages.BrandNameExists);
             }
-            return null;
+            return new SuccessResult();
+        }
+        private IResult CheckIfBrandExists(int id)
+        {
+            var result = _brandDal.Get(b=>b.BrandId==id);
+            if (result != null)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult(BrandMessages.BrandNotExists);
         }
     }
 }
