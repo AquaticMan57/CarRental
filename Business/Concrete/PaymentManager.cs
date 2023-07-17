@@ -34,13 +34,14 @@ namespace Business.Concrete
             {
                 return new ErrorResult(result.Message);
             }
-            if (DateTime.Now.Hour == 05)
+            if(payment.Status == false)
             {
-                return new ErrorResult(Messages.MaintenanceTime);
+                return new SuccessResult(PaymentMessages.CardChecked);
             }
             _paymentDal.Add(payment);
             return new SuccessResult(PaymentMessages.Succeed);
         }
+
         [PerformanceAspect(30)]
         public IResult Delete(Payment payment)
         {
@@ -99,20 +100,28 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<Payment>(result,Messages.Succeed);
         }
-        private IResult CheckIfExDateLasterThanNowOrPast(DateTime date)
+        private IResult CheckIfExDateLasterThanNowOrPast(string exDate)
         {
-            if (date>DateTime.Now)
+            string[] date = exDate.Split("/");
+            int month = Int16.Parse(date[0]);
+            int year = Int16.Parse(date[1]);
+            if (year > DateTime.Now.Year)
             {
                 return new SuccessResult();
             }
-            return new ErrorResult(PaymentMessages.InvalidExDate);
+            else if (year == DateTime.Now.Year)
+            {
+                if (month >= DateTime.Now.Hour)
+                {
+                    return new SuccessResult();
+                }
+                else
+                {
+                    return new ErrorResult(PaymentMessages.InvalidExDate);
+                }
+            }
+            return new ErrorResult(PaymentMessages.InvalidExDate + DateTime.Now.Year + " " +year);
         }
 
-        public IResult CheckCard(Payment payment)
-        {
-            // eklenecek...
-            // kredi kartini burada kontrol et ondan sonra bu data yi front end e cek 
-            // buranin amaci kullanici kredi kartini kaydetmek istemez ise burasi calisicak.
-        }
     }
 }

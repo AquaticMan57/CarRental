@@ -55,6 +55,7 @@ namespace Business.Constants.Messages
     {
         public static string UserRegistered = "Basariyla kayit olundu";
         public static string UserAlreadyExists = "Kullanici zaten mevcut!!";
+        public static string MailAlreadyExists = "Bu mail adresine sahip kullanici zaten mevcut";
 
         public static string UserUpdated = "Kullanici guncellendi";
         public static string UserDeleted = "Kullanici silindi";
@@ -76,7 +77,9 @@ namespace Business.Constants.Messages
     {
         public static string RentalDetailDtoListed = "Kiralamalar listelendi!!";
         public static string NoDto = "Listelemede bir sey gozukmedi!!!";
-
+        public static string WrongRentDate = "Kiralama tarihi teslim tarihinden erken olmali";
+        public static string RentalBusyAlert = "Secilen tarihte bu arac mesgul";
+        public static string RentalNotLaterThanNow = "Secilen Tarih gecerli degil"; 
 
     }
     public class PaymentMessages : Messages
@@ -84,6 +87,7 @@ namespace Business.Constants.Messages
         public static string PayAdded = "Kredi Karti Eklendi!";
         public static string PayNotFound = "Kredi Karti Bulunamadi";
         public static string InvalidExDate = "Gecersiz Son Kullanma Tarihi";
+        public static string CardChecked = "Kredi Karti Kontrol Edildi";
     }
 
 }

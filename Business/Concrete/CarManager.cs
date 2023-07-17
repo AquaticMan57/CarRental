@@ -43,10 +43,6 @@ namespace Business.Concrete
             {
                return new ErrorResult(result.Message);
             }
-            if (DateTime.Now.Hour ==05)
-            {
-                return new ErrorResult(Messages.MaintenanceTime);
-            }
             
             _carDal.Add(car);
             return new SuccessResult(Messages.Succeed);

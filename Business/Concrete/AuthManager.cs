@@ -2,6 +2,7 @@
 using Business.Constants.Messages;
 using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
+using Core.Utilities.BusinessRules;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.Jwt;
@@ -45,6 +46,11 @@ namespace Business.Concrete
         public IDataResult<AccessToken> Register
             (UserForRegisterDto userForRegisterDto,string password)
         {
+            var result = BusinessRules.Run(CheckIfTheMailAlreadyUsed(userForRegisterDto.Email));
+            if (result != null)
+            {
+                return new ErrorDataResult<AccessToken>(result.Message);
+            }
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(password,out passwordHash,out passwordSalt);
             User user = new User
@@ -77,6 +83,14 @@ namespace Business.Concrete
             return new SuccessDataResult<AccessToken>(accessToken, AccessTokenMessages.TokenCreated);
 
         }
-
+        private IResult CheckIfTheMailAlreadyUsed(string mail)
+        {
+            var result = _userService.GetByMail(mail).Data;
+            if (result != null)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult(UserMessages.MailAlreadyExists);
+        }
     }
 }

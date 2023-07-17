@@ -23,16 +23,7 @@ namespace WebAPI.Controllers
         public IActionResult Delete(User user) { var result = _userService.Delete(user); if (result.Success) { return Ok(result); } return BadRequest(result); }
         [HttpPost("update")]
         public IActionResult Update(UserForUpdateDto userForUpdateDto) { var result = _userService.Update(userForUpdateDto); if (result.Success) { return Ok(result); } return BadRequest(result); }
-        [HttpGet("getuserbycarid")]
-        public IActionResult GetByCarId(int id)
-        {
-            var result = _userService.GetUserByCarId(id);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result.Message);
-        }
+        
         [HttpGet("getuserbymail")]
         public IActionResult GetByMail(string mail) 
         {

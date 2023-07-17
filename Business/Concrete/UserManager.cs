@@ -54,15 +54,18 @@ namespace Business.Concrete
             }
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.Succeed);
         }
-        public IDataResult<List<UserDetailDto>> GetUserByCarId(int carId)
-        {
-            var result = _userDal.GetUserByCarId(carId);
-            return new SuccessDataResult<List<UserDetailDto>>(result);
-        }
+        
 
         public IDataResult<User> GetByMail(string mail)
         {
-            return new SuccessDataResult<User>(_userDal.Get(u=>u.Email == mail),Messages.Succeed);
+            var result = _userDal.Get(u => u.Email == mail);
+            if (result !=null)
+            {
+                return new SuccessDataResult<User>(result, Messages.Succeed);
+
+            }
+
+            return new ErrorDataResult<User>(UserMessages.MailAlreadyExists);
         }
 
         

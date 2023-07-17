@@ -28,32 +28,7 @@ namespace DataAccess.Concrete.EfMemory
 
             }
         }
-        public List<UserDetailDto> GetUserByCarId(int carId)
-        {
-            using (var context = new NorthwindContext())
-            {
-                var result = from u in context.Users
-                             join cu in context.Customers
-                             on u.Id equals cu.UserId
-                             join r in context.Rentals
-                             on cu.CustomerId equals r.CustomerId
-                             join c in context.Cars
-                             on r.CarId equals c.Id
-                             where c.Id == carId
-                             select new UserDetailDto
-                             {
-                                 CarId = carId,
-                                 CustomerId = r.CustomerId,
-                                 Email = u.Email,
-                                 UserId = u.Id,
-                                 UserName = u.FirstName +" "+ u.LastName,
-                                 Status = u.Status,
-
-                             };
-                return result.ToList();
-
-            }
-        }
+        
 
         public List<UserDetailDto> GetUserDtoByCustomerId(int customerId)
         {

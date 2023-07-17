@@ -6,6 +6,8 @@ using Core.Utilities.Results;
 using DataAccess.Concrete.EfMemory;
 using Entities.Concrete;
 using System;
+using System.Text.Json.Serialization;
+
 namespace ReCapProject
 {
 	class Program
@@ -26,29 +28,20 @@ namespace ReCapProject
             //    CompanyName ="Savas ltd sti"
 
             //});
-            var result = carManager.Add(new Car
-            {
-                BrandId= 1,
-                ColorId= 1,
-                DailyPrice= 250,
-                ModelYear="2014",
-                Description="Volkswagen Tiguan"
-                
+            var text = "2022-12-02";
+            string[] textSplits = text.Split("-");
 
-            });
+            Console.WriteLine(textSplits[0] +" "+ textSplits[1] +" " + textSplits[2]);
+            long splittedText = Int64.Parse(textSplits[0] + textSplits[1] + textSplits[2]);
+            Console.WriteLine(splittedText);
 
-            if (result.Success)
+            var rentDate = "20221201";
+            var returnDate = "20221202";
+            if (Int64.Parse(returnDate) > Int64.Parse(rentDate))
             {
-                Console.WriteLine(result);
-                foreach (var item in carManager.GetAll().Data)
-                {
-                    Console.WriteLine(item);
-                }
+                Console.WriteLine("Islem Basarili");
             }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
+            
 
             //var result2 = colorManager.Add(new Colors
             //{

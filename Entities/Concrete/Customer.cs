@@ -13,5 +13,6 @@ namespace Entities.Concrete
         public int UserId { get; set; }
         public string CompanyName { get; set; }
         public string CompanyMail { get; set; }
+        public string Address { get; set; }
     }
 }

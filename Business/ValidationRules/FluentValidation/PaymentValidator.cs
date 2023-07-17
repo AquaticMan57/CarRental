@@ -12,9 +12,11 @@ namespace Business.ValidationRules.FluentValidation
     {
         public PaymentValidator()
         {
-            RuleFor(p => p.CardNumber).Must(Has16Keys);
-            RuleFor(p=>p.ExDate).NotEmpty();
+            RuleFor(p => p.CardNumber).Must(Has16Keys);;
             RuleFor(p => p.Cvc).Length(3);
+            RuleFor(p => p.ExDate).NotEmpty();
+            //RuleFor(p => p.ExDate).Must(LasterThanNowOrPast);
+            
         }
         private bool Has16Keys(string arg)
         {
@@ -29,14 +31,28 @@ namespace Business.ValidationRules.FluentValidation
             }
             return result;
         }
-        private bool LasterThanNowOrPast(DateTime date)
+        private bool LasterThanNowOrPast(string exYear)
         {
-            
-            if (date>DateTime.Now)
+            string[] date = exYear.Split("/");
+            int month = Int16.Parse(date[0]);
+            int year = Int16.Parse(date[1]);
+            if (year > DateTime.Now.Year)
             {
                 return true;
             }
+            else if (year == DateTime.Now.Year)
+            {
+                if (month >= DateTime.Now.Hour)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
             return false;
         }
+        
     }
 }

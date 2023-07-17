@@ -29,6 +29,7 @@ namespace Core.Extensions
             {
                 await HandleExceptionAsync(httpContext, e);
             }
+
         }
 
         private Task HandleExceptionAsync(HttpContext httpContext, Exception e)

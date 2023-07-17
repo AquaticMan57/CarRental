@@ -14,7 +14,6 @@ namespace Business.Abstract
         IResult Delete(Payment payment);
         IResult DeleteById(int id);
         IResult Update(Payment payment);
-        IResult CheckCard(Payment payment);
         IDataResult<List<Payment>> GetAll();
         IDataResult<List<Payment>> GetPaysByUserId(int userId);
         IDataResult<Payment> GetPayById(int id);

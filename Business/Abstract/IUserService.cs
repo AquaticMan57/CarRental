@@ -21,7 +21,6 @@ namespace Business.Abstract
         IDataResult<List<OperationClaim>> GetOperationClaims(User user);
         IDataResult<User> GetByMail(string mail);
         IResult Transaction(User user);
-        IDataResult<List<UserDetailDto>> GetUserByCarId(int carId);
         IDataResult<User> GetUserByUserName(string userName);
         IDataResult<List<UserDetailDto>> GetUserDetailsByUserId(int userId);
         IDataResult<List<UserDetailDto>> GetUserDetailsByCustomerId(int customerId);
