@@ -5,6 +5,7 @@ using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
+using Core.Utilities.BusinessRules;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using DataAccess.Abstract;
@@ -118,6 +119,7 @@ namespace Business.Concrete
             _userDal.Update(user);
             return new SuccessResult(UserMessages.UserUpdated);
         }
+        
 
         public IDataResult<User> GetUserByUserName(string userName)
         {
@@ -169,6 +171,39 @@ namespace Business.Concrete
             return new SuccessResult(UserMessages.UserDeleted);
         }
 
-        
+        public IResult UpdatePassword(UserForChangePasswordDto userForChangePasswordDto)
+        {
+            byte[] passwordHash, passwordSalt;
+            var userToCheck = GetUserById(userForChangePasswordDto.Id);
+            var result = BusinessRules.Run(CheckThePasswordHash(userForChangePasswordDto.PasswordToChange, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt));
+            if (result != null )
+            {
+                return new ErrorResult(result.Message);
+            }
+            HashingHelper.CreatePasswordHash(userForChangePasswordDto.Password,out passwordHash,out passwordSalt);
+            User user = new User
+            {
+                Id = userToCheck.Data.Id,
+                Email = userToCheck.Data.Email,
+                FirstName = userToCheck.Data.FirstName,
+                LastName = userToCheck.Data.LastName,
+                PasswordSalt = passwordSalt,
+                PasswordHash = passwordHash,
+                Status = true
+
+            };
+            _userDal.Update(user);
+            return new SuccessResult(UserMessages.UserUpdated);
+
+        }
+        private IResult CheckThePasswordHash(string password, byte[] passwordHash , byte[] passwordSalt)
+        {
+            var result = HashingHelper.VerifyPasswordHash(password, passwordHash, passwordSalt);
+            if (result != true)
+            {
+                return new ErrorResult(UserMessages.PasswordError);
+            }
+            return new SuccessResult();
+        }
     }
 }

@@ -27,8 +27,6 @@ namespace Business.Concrete
         }
         //[SecuredOperation("add,admin")]
         //[CacheRemoveAspect("IColorsService.Get")]
-        //[ValidationAspect(typeof(ColorsValidator))]
-        //[PerformanceAspect(10)]
 
         [ValidationAspect(typeof(ColorsValidator))]
         [PerformanceAspect(10)]

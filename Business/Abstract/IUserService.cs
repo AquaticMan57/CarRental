@@ -15,6 +15,7 @@ namespace Business.Abstract
         IResult DeleteById(int id);
         IResult Delete(User user);
         IResult Update(UserForUpdateDto userForUpdateDto);
+        IResult UpdatePassword(UserForChangePasswordDto userForChangePasswordDto);
         IResult Add(User user);
         IDataResult<User> GetUserById(int id);
         IDataResult<List<User>> GetAll();

@@ -76,6 +76,7 @@ namespace Business.Concrete
             }
             return new SuccessResult(UserMessages.Succeed);
         }
+        
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
             var claims = _userService.GetOperationClaims(user);
@@ -88,9 +89,9 @@ namespace Business.Concrete
             var result = _userService.GetByMail(mail).Data;
             if (result != null)
             {
-                return new SuccessResult();
+                return new ErrorResult(UserMessages.MailAlreadyExists);
             }
-            return new ErrorResult(UserMessages.MailAlreadyExists);
+            return new SuccessResult();
         }
     }
 }
