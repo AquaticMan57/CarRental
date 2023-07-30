@@ -38,12 +38,11 @@ namespace Business.Concrete
 
         public IResult Add(IFormFile file, CarImage carImage)
         {
-            //var result = BusinessRules.Run(CheckIfCarImagesLimit(carImage.CarId));
-
-            //if (result != null)
-            //{
-            //    return result;
-            //}
+            var result = BusinessRules.Run(CheckIfCarImagesLimit(carImage.CarId));
+            if (result != null)
+            {
+                return new ErrorResult(result.Message);
+            }
             carImage.ImagePath = _fileHelper.Upload(file, PathConstant.ImagePath);
             carImage.Date = DateTime.Now;
             _carImageDal.Add(carImage);
@@ -140,9 +139,9 @@ namespace Business.Concrete
         private IResult CheckIfCarImagesLimit(int carId)
         {
             var result = _carImageDal.GetAll(c=>c.CarId== carId).Count;
-            if (result < 5)
+            if (result  < 2)
             {
-                return new SuccessResult(Messages.Succeed);
+                return new SuccessResult();
             }
             return new ErrorResult(CarImagesMessage.CarImagesLimitExceded);
         }
@@ -154,7 +153,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.MaintenanceTime);
             }
-            return new SuccessResult(Messages.Succeed);
+            return new SuccessResult();
         }
         private IResult CheckTheMaintenanceTime()
         {
@@ -162,7 +161,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.MaintenanceTime);
             }
-            return new SuccessResult(Messages.Succeed);
+            return new SuccessResult();
         }
     }
 }

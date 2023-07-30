@@ -44,7 +44,7 @@ namespace Business.Constants.Messages
     }
     public class CarImagesMessage : Messages
     {
-        public static string CarImagesLimitExceded = "Arac resminin sayi limitini doldurdunuz";
+        public static string CarImagesLimitExceded = "her bir aracin yalnizca bir resmi olabilir";
         public static string CarImageAdded = "Resim basariyla yuklendi.";
     }
     public class OperationClaimsMessage : Messages
