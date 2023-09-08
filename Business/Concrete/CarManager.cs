@@ -1,25 +1,21 @@
-﻿using Autofac;
-using Business.Abstract;
-using Business.BusinessAspects.Autofac;
-using Business.Constants.Messages;
-using Business.ValidationRules.FluentValidation;
-using Core.Aspects.Autofac.Caching;
-using Core.Aspects.Autofac.Performances;
-using Core.Aspects.Autofac.Validation;
-using Core.Utilities.BusinessRules;
-using Core.Utilities.Results;
-using DataAccess.Abstract;
-using DataAccess.Concrete.InMemory;
-using Entities.Concrete;
-using Entities.DTO_s;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Business.Concrete
 {
+    #region Usings
+    using Autofac;
+    using Business.Abstract;
+    using Business.Constants.Messages;
+    using Business.ValidationRules.FluentValidation;
+    using Core.Aspects.Autofac.Caching;
+    using Core.Aspects.Autofac.Performances;
+    using Core.Aspects.Autofac.Validation;
+    using Core.Utilities.BusinessRules;
+    using Core.Utilities.Results;
+    using DataAccess.Abstract;
+    using Entities.Concrete;
+    using Entities.DTO_s;
+
+    #endregion
     public class CarManager : ICarService
     {
         ICarDal _carDal;
@@ -32,7 +28,7 @@ namespace Business.Concrete
         //loglamak : yapilan operasyonda bir yerde kaydini tutmak
 
         //[SecuredOperation("add,admin")]
-        //[CacheRemoveAspect("ICarService.Get")]
+        [CacheRemoveAspect("ICarService.Get")]
         [ValidationAspect(typeof(CarValidator))]
         [PerformanceAspect(10)]
 
@@ -49,7 +45,7 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("delete,admin")]
-        //[CacheRemoveAspect("ICarService.Get")]
+        [CacheRemoveAspect("ICarService.Get")]
         [PerformanceAspect(10)]
 
         public IResult Delete(Car car)
@@ -68,7 +64,7 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
-        //[CacheAspect]
+        [CacheAspect]
         [PerformanceAspect(10)]
 
         public IDataResult<List<Car>> GetCarByDailyPrice(decimal min, decimal max)
@@ -78,7 +74,7 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
-        //[CacheAspect]
+        [CacheAspect]
         [PerformanceAspect(10)]
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
@@ -88,7 +84,7 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
-        //[CacheAspect]
+        [CacheAspect]
         [PerformanceAspect(10)]
 
         public IDataResult<List<Car>> GetAll()
@@ -97,7 +93,7 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
-        //[CacheAspect]
+        [CacheAspect]
         [PerformanceAspect(10)]
 
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
@@ -107,6 +103,7 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("list,admin")]
+        [CacheAspect(10)]
         [PerformanceAspect(10)]
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
@@ -115,7 +112,7 @@ namespace Business.Concrete
         }
 
         //[SecuredOperation("update")]
-        //[CacheRemoveAspect("ICarService.Get")]
+        [CacheRemoveAspect("ICarService.Get")]
         [PerformanceAspect(10)]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
@@ -185,7 +182,7 @@ namespace Business.Concrete
             
             return new SuccessDataResult<Car>(_carDal.Get(c=>c.Id == carId),Messages.Succeed);
         }
-
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult DeleteById(int carId)
         {
             var carToDelete = _carDal.Get(c=>c.Id == carId);
